@@ -14,13 +14,13 @@ async def inline_start (update: Update, context):
     await quarry.answer()
 
     if quarry.data == 'start_help':
-        quarry.answer(massages.HELP)
+        await quarry.edit_message_text(massages.HELP)
     elif quarry.data == 'start_language':
-        quarry.edit_message_text(massages.SHOW_LANG, reply_markup=keyboard.get_lang_buttons())
+        await quarry.edit_message_text(massages.SHOW_LANG, reply_markup=keyboard.get_lang_buttons())
     elif quarry.data == 'start_fas':
-        quarry.edit_message_text(massages.CHOSE_FAS)
+        await quarry.edit_message_text(massages.CHOSE_FAS)
     elif quarry.data == 'start_eng':
-        quarry.edit_message_text(massages.CHOSE_ENG)
+        await quarry.edit_message_text(massages.CHOSE_ENG)
         
 
 
