@@ -5,8 +5,8 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton,
 def get_greet_buttons ():
     keyboard = [
         [
-            InlineKeyboardButton(text='🅰 Language/زبان', callback_data='/language'),
-            InlineKeyboardButton(text='🔴 Help/راهنما', callback_data='/help')
+            InlineKeyboardButton(text='🅰 Language | زبان', callback_data='/language'),
+            InlineKeyboardButton(text='🔴 Help | راهنما', callback_data='/help')
         ]
     ]
 

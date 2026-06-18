@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from telegram.ext import Application, CommandHandler
 from handlers.start import start
 load_dotenv()
-TOKEN = os.get_env("BOT_TOKEN")
+TOKEN = os.getenv("BOT_TOKEN")
 
 def main():
     app = Application.builder().token(TOKEN).build()
