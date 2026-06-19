@@ -8,7 +8,7 @@ async def start (update : Update, context : ContextTypes.DEFAULT_TYPE):
     lang = context.user_data.get('lang', 'en')
     if 'lang' not in context.user_data:
         context.user_data['lang'] = 'en'
-        
+
     await update.message.reply_text(get_message(lang, 'Welcome'), reply_markup=keyboard.get_greet_buttons())
 
 
@@ -31,7 +31,7 @@ async def inline_start (update: Update, context):
         lang = context.user_data['lang']
         await quary.edit_message_text(get_message(lang, 'Chose_fas'))
     elif quary.data == 'start_eng':
-        context.user_date['lang'] = 'en'
+        context.user_data['lang'] = 'en'
         lang = context.user_data['lang']
         await quary.edit_message_text(get_message(lang, 'Chose_eng'))
         
