@@ -1,28 +1,41 @@
 from telegram import Update
-import massages
+from telegram.ext import ContextTypes
+from massages import get_message
 import keyboard
 
-async def start (update : Update, context):
-    await update.message.reply_text(massages.WELCOME, reply_markup=keyboard.get_greet_buttons())
+async def start (update : Update, context : ContextTypes.DEFAULT_TYPE):
+    if not context.user_data['lang']:
+        context.user_data['lang'] = 'en'
+
+    lang = context.user_data['lang']
+    await update.message.reply_text(get_message(lang, 'Welcome'), reply_markup=keyboard.get_greet_buttons())
 
 
 async def help (update: Update, context):
-    await update.message.reply_text(massages.HELP)
+    lang = context.user_data['lang']
+    await update.message.reply_text(get_message(lang, 'Help'))
 
 async def inline_start (update: Update, context):
-    quarry = update.callback_query
-    await quarry.answer()
+    quary = update.callback_query
+    await quary.answer()
 
-    if quarry.data == 'start_help':
-        await quarry.edit_message_text(massages.HELP)
-    elif quarry.data == 'start_language':
-        await quarry.edit_message_text(massages.SHOW_LANG, reply_markup=keyboard.get_lang_buttons())
-    elif quarry.data == 'start_fas':
-        await quarry.edit_message_text(massages.CHOSE_FAS)
-    elif quarry.data == 'start_eng':
-        await quarry.edit_message_text(massages.CHOSE_ENG)
+    lang = context.user_data['lang']
+
+    if quary.data == 'start_help':
+        await quary.edit_message_text(get_message(lang, 'Welcome'))
+    elif quary.data == 'start_language':
+        await quary.edit_message_text(get_message(lang, 'Show_lang'), reply_markup=keyboard.get_lang_buttons())
+    elif quary.data == 'start_fas':
+        context.user_data['lang'] = 'fas'
+        lang = context.user_data['lang']
+        await quary.edit_message_text(get_message(lang, 'Chose_fas'))
+    elif quary.data == 'start_eng':
+        context.user_date['lang'] = 'en'
+        lang = context.user_data['lang']
+        await quary.edit_message_text(get_message(lang, 'Chose_eng'))
         
 
 
 async def show_lang (update: Update, context):
-    await update.message.reply_text(massages.SHOW_LANG, reply_markup=keyboard.get_lang_buttons())
+    lang = context.user_data['lang']
+    await update.message.reply_text(get_message(lang, 'Show_lang'), reply_markup=keyboard.get_lang_buttons())
