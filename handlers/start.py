@@ -23,7 +23,7 @@ async def inline_start (update: Update, context):
     lang = context.user_data['lang']
 
     if quary.data == 'start_help':
-        await quary.edit_message_text(get_message(lang, 'Welcome'))
+        await quary.edit_message_text(get_message(lang, 'Help'))
     elif quary.data == 'start_language':
         await quary.edit_message_text(get_message(lang, 'Show_lang'), reply_markup=keyboard.get_lang_buttons())
     elif quary.data == 'start_fas':
