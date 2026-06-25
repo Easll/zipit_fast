@@ -21,6 +21,14 @@ class Database:
 
             )
             await self.conn.commit()
+
+    async def ensure_user_exists (self, user_id, default_language = 'en'):
+        async with self._lock:
+            await self.conn.execute(
+                    " INSERT OR IGNORE INTO users (user_id, language) VALUES (?, ?)",
+                    (user_id, default_language),
+                    )
+            await self.conn.commit()
     
     async def get_language(self, user_id):
         async with self._lock:

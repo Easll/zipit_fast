@@ -4,10 +4,13 @@ from massages import get_message
 import keyboard
 
 async def start (update : Update, context : ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data["db"]
+    user_id = update.effective_user.id
 
-    lang = context.user_data.get('lang', 'en')
-    if 'lang' not in context.user_data:
-        context.user_data['lang'] = 'en'
+    await db.ensure_user_exists (user_id)
+
+    lang = await db.get_language (user_id)
+    context.user_data['lang'] = lang
 
     await update.message.reply_text(get_message(lang, 'Welcome'), reply_markup=keyboard.get_greet_buttons())
 

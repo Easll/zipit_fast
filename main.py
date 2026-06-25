@@ -13,7 +13,7 @@ async def main():
     app = Application.builder().token(TOKEN).build()
 
     db = Database(DB_PATH)
-    await db.init
+    await db.init ()
     app.bot_data['db'] = db
     
     app.add_handler(CommandHandler('start', start))
