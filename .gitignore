@@ -9,3 +9,4 @@ zipit_fast_venv/
 zipit_fast_env/
 tests.py
 __pycache__/
+*.db

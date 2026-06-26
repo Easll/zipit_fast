@@ -12,7 +12,7 @@ class Database:
         self.conn.row_factory = aiosqlite.Row
         await self._create_tables ()
 
-    async def _create_tebles (self):
+    async def _create_tables (self):
         async with self._lock:
             await self.conn.executescript("""
                 CREATE TABLE IF NOT EXISTS users (
