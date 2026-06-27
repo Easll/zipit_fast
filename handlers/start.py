@@ -16,24 +16,33 @@ async def start (update : Update, context : ContextTypes.DEFAULT_TYPE):
 
 
 async def help (update: Update, context):
-    lang = context.user_data['lang']
+    db = context.bot_data['db']
+    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
     await update.message.reply_text(get_message(lang, 'Help'))
 
 async def inline_start (update: Update, context):
     quary = update.callback_query
     await quary.answer()
 
-    lang = context.user_data['lang']
+    db = context.bot_data['db']
+
+    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
 
     if quary.data == 'start_help':
         await quary.edit_message_text(get_message(lang, 'Help'))
     elif quary.data == 'start_language':
         await quary.edit_message_text(get_message(lang, 'Show_lang'), reply_markup=keyboard.get_lang_buttons())
+
     elif quary.data == 'start_fas':
+
+        await db.set_language(user_id = update.effective_user.id, lang = 'fas')
         context.user_data['lang'] = 'fas'
         lang = context.user_data['lang']
         await quary.edit_message_text(get_message(lang, 'Chose_fas'))
+
     elif quary.data == 'start_eng':
+
+        await db.set_language(user_id = update.effective_user.id, lang = 'en')
         context.user_data['lang'] = 'en'
         lang = context.user_data['lang']
         await quary.edit_message_text(get_message(lang, 'Chose_eng'))
@@ -41,5 +50,6 @@ async def inline_start (update: Update, context):
 
 
 async def show_lang (update: Update, context):
-    lang = context.user_data['lang']
+    db = context.bot_data['db']
+    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
     await update.message.reply_text(get_message(lang, 'Show_lang'), reply_markup=keyboard.get_lang_buttons())
