@@ -8,6 +8,7 @@ from database import Database
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 DB_PATH = os.getenv("ZIP_IT_FAST_DB_PATH")
+TMP_PATH = os.getenv("ZIP_IT_FAST_TMP_PATH")
 
 async def init_db (app : Application):
     db = Database(DB_PATH)
