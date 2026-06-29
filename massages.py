@@ -26,6 +26,19 @@ You can always set the language from the main menue.
 
 """
 
+
+EN_EXTRACTING_MEATDATA = """
+Extracting metadata ..."""
+
+EN_METADATA_ADDED = """
+Added to your files, ready to be archived:
+
+Name: {name}
+
+Size: {size}
+"""
+
+
 #Farsi messages
 
 FAS_WELCOME = """
@@ -59,7 +72,16 @@ FAS_CHOSE_FAS = """
 
 """
 
+FAS_EXTRACTING_MEATDATA ="""
+استخراج مشخصات ...""" 
 
+FAS_METADATA_ADDED = """
+به فایل های شما افزوده شد. آماده برای فشرده سازی:
+
+نام: {name}
+
+اندازه:{size}
+"""
 #The dictionary
 
 
@@ -69,6 +91,8 @@ MESSAGES = {
         'Help' : EN_HELP,
         'Show_lang' : EN_SHOW_LANG,
         'Chose_en' : EN_CHOSE_ENG,
+        'Extracting_metadata': EN_EXTRACTING_MEATDATA,
+        'Metadata_added': EN_METADATA_ADDED,
     },
 
     'fas': {
@@ -76,6 +100,8 @@ MESSAGES = {
         'Help' : FAS_HELP,
         'Show_lang' : FAS_SHOW_LANG,
         'Chose_fas' : FAS_CHOSE_FAS,
+        'Extracting_metadata' : FAS_EXTRACTING_MEATDATA,
+        'Metadata_added' : FAS_METADATA_ADDED,
     }
 }
 

@@ -4,6 +4,9 @@ import mimetypes
 from datetime import datetime
 
 def identify_files (message: Message):
+
+    file_obj = None
+
     if message.document:
         file_obj = message.document
         if file_obj.name:
@@ -33,7 +36,25 @@ def identify_files (message: Message):
 
         ext = mimetypes.guess_extension(file_obj.mime_type) if file_obj.mime_type else None
         file_obj_name = f'Un_Named_Photo{file_obj.file_unique_id}{ext or '.jpg'}'
+  
+    elif message.animation:
+        file_obj = message.animation
+        if file_obj.name:
+            file_obj_name = file_obj.name
+        else:
+            ext = mimetypes.guess_extension(file_obj.mime_type) if file_obj.mime_type else None
+            file_obj_name = f'Un_Named_Gif{file_obj.file_unique_id}{ext or '.gif'}'
 
+   if not file_obj:
+       return None
+
+    output = {
+            'name': file_obj_name,
+            'unique_id': file_obj.file_unique_id,
+            'file_id': file_obj.file_id,
+            'size': file_obj.file_size,}
+    
+    return output
 
 #def zip_it ()
 
