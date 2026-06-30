@@ -91,7 +91,7 @@ class Database:
             (user_id,)
             )
         rows = await cursor.fetchall()
-        return [dict(row) for row in rows]
+        return rows 
 
     async def mark_files_archived (self, user_id):
         async with self._lock:

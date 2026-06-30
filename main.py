@@ -1,7 +1,8 @@
 import os
 from dotenv import load_dotenv
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from handlers.start import start, help, show_lang, inline_start
+from handlers.zip import get_files, add_files 
 import asyncio
 from database import Database
 
@@ -30,6 +31,9 @@ def main():
     app.add_handler(CommandHandler('language', show_lang))
 
     app.add_handler(CallbackQueryHandler(inline_start, pattern='^start_'))
+
+    app.add_handler(CommandHandler('show_files', get_files))
+    app.add_handler(MessageHandler(filters.ATTACHMENT, add_files))
 
 
     app.run_polling()

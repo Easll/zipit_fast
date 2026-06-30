@@ -35,7 +35,7 @@ def identify_files (message: Message):
         file_obj = message.photo[-1]
 
         ext = mimetypes.guess_extension(file_obj.mime_type) if file_obj.mime_type else None
-        file_obj_name = f'Un_Named_Photo{file_obj.file_unique_id}{ext or '.jpg'}'
+        file_obj_name = f'Photo{file_obj.file_unique_id}{ext or '.jpg'}'
   
     elif message.animation:
         file_obj = message.animation
@@ -44,6 +44,14 @@ def identify_files (message: Message):
         else:
             ext = mimetypes.guess_extension(file_obj.mime_type) if file_obj.mime_type else None
             file_obj_name = f'Un_Named_Gif{file_obj.file_unique_id}{ext or '.gif'}'
+    
+    elif message.voice:
+        file_obj = message.voice
+        file_obj_name = f"Voice{file_obj.file_unique_id}.ogg"
+
+    elif message.video_note:
+        file_obj = message.video_note
+        file_obj_name = f"Live_video{file_obj.file_unique_id}.mp4"
 
    if not file_obj:
        return None
