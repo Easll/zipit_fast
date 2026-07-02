@@ -38,12 +38,13 @@ Name: {name}
 Size: {size}
 """
 
-EN_SHOW_PENDING_FILES = """
-Your pending files:
+EN_SHOW_PENDING_FILES_I = """
+Your pending files:"""
 
+EN_SHOW_PENDING_FILES_II ="""
 Name: {name}
-
-Size: {size}"""
+Size: {size}
+"""
 
 #Farsi messages
 
@@ -89,12 +90,16 @@ FAS_METADATA_ADDED = """
 اندازه:{size}
 """
 
-FAS_SHOW_PENDING_FILES = """
+FAS_SHOW_PENDING_FILES_I = """
 فایل های آرشیو نشده شما:
+"""
 
+FAS_SHOW_PENDING_FILES_II = """
 نام: {name}
+اندازه: {size}
+"""
 
-اندازه: {size}"""
+
 #The dictionary
 
 
@@ -106,7 +111,8 @@ MESSAGES = {
         'Chose_en' : EN_CHOSE_ENG,
         'Extracting_metadata': EN_EXTRACTING_MEATDATA,
         'Metadata_added': EN_METADATA_ADDED,
-        'Show_pending_files': EN_SHOW_PENDING_FILES,
+        'Show_pending_files_I': EN_SHOW_PENDING_FILES_I,
+        'Show_pending_files_II': EN_SHOW_PENDING_FILES_II,
     },
 
     'fas': {
@@ -116,7 +122,8 @@ MESSAGES = {
         'Chose_fas' : FAS_CHOSE_FAS,
         'Extracting_metadata' : FAS_EXTRACTING_MEATDATA,
         'Metadata_added' : FAS_METADATA_ADDED,
-        'Show_pending_files': FAS_SHOW_PENDING_FILES,
+        'Show_pending_files_I': FAS_SHOW_PENDING_FILES_I,
+        'Show_pending_files_II': FAS_SHOW_PENDING_FILES_II,
     }
 }
 

@@ -67,6 +67,19 @@ def identify_files (message: Message):
     
     return output
 
+
+def bytes_to_kb (bt: int) -> str:
+    kb = bt // 1024
+    if kb < 1:
+        return '>1 KB'
+    return f"{kb} KB"
+
+
 #def zip_it ()
 
-#def zip_them ()    
+#def zip_them ()   
+
+
+
+
+

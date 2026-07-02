@@ -45,7 +45,7 @@ async def inline_start (update: Update, context):
         await db.set_language(user_id = update.effective_user.id, lang = 'en')
         context.user_data['lang'] = 'en'
         lang = context.user_data['lang']
-        await quary.edit_message_text(get_message(lang, 'Chose_eng'))
+        await quary.edit_message_text(get_message(lang, 'Chose_en'))
         
 
 

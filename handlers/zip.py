@@ -3,7 +3,7 @@ from telegram.ext import ContextTypes
 from massages import get_message
 import keyboard
 import massages
-from utils import identify_files
+from utils import identify_files, bytes_to_kb
 from massages import get_message
 
 async def add_files (update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -22,7 +22,7 @@ async def add_files (update: Update, context: ContextTypes.DEFAULT_TYPE):
             size = metadata['size']
             ) 
     
-    await update.message.reply_text(get_message(lang=lang, key= 'Metadata_added').format(name = metadata['name'], size = str(metadata['size'])))
+    await update.message.reply_text(get_message(lang=lang, key= 'Metadata_added').format(name = metadata['name'], size = str(bytes_to_kb(metadata['size']))))
 
 
 async def get_files (update:Update, context: ContextTypes.DEFAULT_TYPE):
@@ -32,11 +32,12 @@ async def get_files (update:Update, context: ContextTypes.DEFAULT_TYPE):
     
     data_dictionary = await db.get_pending_files(user_id = update.effective_user.id)
     
-    message_text = ""
+    message_text = f"{get_message(lang=lang, key = 'Show_pending_files_I')} \n ===================== \n"
+    count = 0
     for row in data_dictionary:
-        message_text = message_text + get_message(lang = lang, key = 'Show_pending_files').format(name = row['file_name'], size = row['file_size']) + '\n'
+        count = count + 1
+        message_text = message_text +f'({count}) \n'+ get_message(lang = lang, key = 'Show_pending_files_II').format(name = row['file_name'], size = bytes_to_kb(row['file_size'])) + '\n ===================== \n'
     await update.message.reply_text(message_text)
-
 
 
 
