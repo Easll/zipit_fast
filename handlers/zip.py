@@ -12,7 +12,7 @@ async def add_files (update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(get_message(lang=lang, key= 'Extracting_metadata'))
 
-    metadata = await identify_files(update.message)
+    metadata = identify_files(update.message)
 
     await db.add_pending_file(
             user_id = update.effective_user.id, 
