@@ -1,7 +1,10 @@
-import pyzipper as zp
+from os.path import isfile
+import asyncio
+import pyzipper 
 from telegram import Message
 import mimetypes
 from datetime import datetime
+import os
 
 def identify_files (message: Message):
 
@@ -73,6 +76,40 @@ def bytes_to_kb (bt: int) -> str:
     if kb < 1:
         return '>1 KB'
     return f"{kb} KB"
+
+
+def _build_archive (file_paths: list [str], archive_save_path: str, password: str | None = None):
+    encryption = pyzipper.WZ_AES if password else None
+    seen_names = {}
+    with pyzipper.AESZipFile(archive_save_path, 'w', compression = pyzipper.ZIP_DEFLATED, encryption = encryption) as zp:
+        
+        if password:
+            zp.setpassword(password.encode('utf-8'))
+
+        for file_path in file_paths:
+            if not os.path.isfile(file_path):
+                print (f"file {file_path} wasn't found")
+                continue
+
+            basename = os.path.basename(file_path)
+            name, ext = os.path.splitext(basename)
+
+            if basename in seen_names:
+                seen_names[basename] += 1
+                arcname = f"{name}({seen_names[basename]}){ext}"
+            else:
+                seen_names[basename] = 0
+                arcname = basename
+
+            zp.write(file_path, arcname=arcname)
+
+
+async def build_archive  (file_paths: list [str], archive_save_path: str, password: str | None = None):
+    await asyncio.to_thread(_build_archive, file_paths, archive_save_path, password)
+    
+
+
+
 
 
 #def zip_it ()
