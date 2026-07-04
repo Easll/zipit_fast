@@ -6,6 +6,11 @@ import massages
 from utils import identify_files, bytes_to_kb
 from massages import get_message
 
+ASKING_FOR_ARCHIVE_NAME = 1
+ASKING_FOR_ENCRYPTION = 2
+ASKING_FOR_PASSWORD = 3
+
+
 async def add_files (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
     lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
@@ -38,6 +43,43 @@ async def get_files (update:Update, context: ContextTypes.DEFAULT_TYPE):
         count = count + 1
         message_text = message_text +f'({count}) \n'+ get_message(lang = lang, key = 'Show_pending_files_II').format(name = row['file_name'], size = bytes_to_kb(row['file_size'])) + '\n ===================== \n'
     await update.message.reply_text(message_text)
+
+async def ask_for_archive_name (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+
+    await update.message.reply_text(get_message(lang=lang, key='Ask_for_archive_name'))
+    return ASKING_FOR_ARCHIVE_NAME
+
+async def recive_archive_name (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+
+    archive_name = update.message.text
+    context.user_data['archive_name']
+
+    update.message.reply_text(get_message(lang=lang, key='Archive_name_recived'))
+    return ASKING_FOR_ENCRYPTION
+
+
+async def ask_for_password (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+
+    await update.message.reply_text(get_message(lang=lang, key='ask_for_password')) 
+    return ASKING_FOR_PASSWORD
+
+
+async def recive_password (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+
+    password = update.message.text
+    context.user_data['password']
+
+    update.message.reply_text(get_message(lang=lang, key='Password_recived'))
+
+
 
 
 
