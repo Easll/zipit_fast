@@ -1,10 +1,19 @@
+import asyncio
+from logging import exception
+from uuid import uuid4
+import shutil
+from aiosqlite import context
+from pyzipper.zipfile import shutil
 from telegram import Update
-from telegram.ext import ContextTypes
+from telegram.ext import ContextTypes, ConversationHandler
 from massages import get_message
 import keyboard
 import massages
-from utils import identify_files, bytes_to_kb
+from utils import identify_files, bytes_to_kb, build_archive
 from massages import get_message
+import os
+
+import utils
 
 ASKING_FOR_ARCHIVE_NAME = 1
 ASKING_FOR_ENCRYPTION = 2
@@ -56,9 +65,9 @@ async def recive_archive_name (update: Update, context: ContextTypes.DEFAULT_TYP
     lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
 
     archive_name = update.message.text
-    context.user_data['archive_name']
+    context.user_data['archive_name'] = archive_name
 
-    update.message.reply_text(get_message(lang=lang, key='Archive_name_recived'))
+    await update.message.reply_text(get_message(lang=lang, key='Archive_name_recived'))
     return ASKING_FOR_ENCRYPTION
 
 
@@ -66,19 +75,117 @@ async def ask_for_password (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
     lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
 
-    await update.message.reply_text(get_message(lang=lang, key='ask_for_password')) 
+    await update.message.reply_text(get_message(lang=lang, key='Ask_for_password')) 
     return ASKING_FOR_PASSWORD
 
+COMPRESSION_SEMAPHORE = asyncio.Semaphore(2)
 
-async def recive_password (update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def build_archive_encrypted (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
     lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
 
     password = update.message.text
-    context.user_data['password']
+    context.user_data['password'] = password
 
-    update.message.reply_text(get_message(lang=lang, key='Password_recived'))
+    await update.message.reply_text(get_message(lang=lang, key='Password_recived_start_compression'))
+    
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    tmp_dir_files = os.path.join(project_root, 'tmp_files', f"to_be_compressed_{update.effective_user.id}_{uuid4().hex}")
+    arhcive_path = os.path.join(project_root,'tmp_files', f"{update.effective_user.id}_{uuid4().hex}.zip")
 
+    pending_files = await db.get_pending_files(user_id = update.effective_user.id)
+    download_paths = []
+
+    async with COMPRESSION_SEMAPHORE:
+       try:
+           seen_names = {}
+           for file in pending_files:
+               tg_file = await context.bot.get_file(file['file_id']) 
+               local_path = os.path.join(tmp_dir_files, file['file_name'])
+
+               if local_path in download_paths:
+                   seen_names[local_path] += 1
+                   name, ext = os.path.splitext(file['file_name'])
+                   local_path = os.path.join(tmp_dir_files, f"{name}({seen_names[local_path]}){ext}")
+               else:
+                   seen_names[local_path] = 0
+
+                await tg_file.download_to_drive(custom_path=local_path)
+
+            await update.message.edit_text(get_message(lang=lang, key='Compressing'))
+            await build_archive(file_paths=download_paths, archive_save_path=arhcive_path, password=password)
+
+            await update.message.edit_text(get_message(lang=lang, key='Uploading'))
+            with open (arhcive_path, 'rb') as f:
+                await update.message.reply_document(document=f, filename=context.user_data['archive_name'])
+
+            await db.mark_files_archived(user_id = update.effective_user.id)
+
+       except Excaption as e:
+           print (f'compression failed: {e}')
+           await update.message.reply_text(get_message(lang = lang, key = 'Compression_failed'))
+
+        finally:
+            if os.path.exists(tmp_dir_files): shutil.rmtree(tmp_dir_files, ignore_errors=True)
+            if os.path.exists(arhcive_path): os.remove(arhcive_path)
+
+    return ConversationHandler.END
+
+
+async def build_archive_un_encrypted (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+
+    await update.message.reply_text(get_message(lang=lang, key='Start_comression'))
+    
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    tmp_dir_files = os.path.join(project_root, 'tmp_files', f"to_be_compressed_{update.effective_user.id}_{uuid4().hex}")
+    arhcive_path = os.path.join(project_root,'tmp_files', f"{update.effective_user.id}_{uuid4().hex}.zip")
+
+    pending_files = await db.get_pending_files(user_id = update.effective_user.id)
+    download_paths = []
+
+    async with COMPRESSION_SEMAPHORE:
+       try:
+           seen_names = {}
+           for file in pending_files:
+               tg_file = await context.bot.get_file(file['file_id']) 
+               local_path = os.path.join(tmp_dir_files, file['file_name'])
+
+               if local_path in download_paths:
+                   seen_names[local_path] += 1
+                   name, ext = os.path.splitext(file['file_name'])
+                   local_path = os.path.join(tmp_dir_files, f"{name}({seen_names[local_path]}){ext}")
+               else:
+                   seen_names[local_path] = 0
+
+                await tg_file.download_to_drive(custom_path=local_path)
+
+            await update.message.edit_text(get_message(lang=lang, key='Compressing'))
+            await build_archive(file_paths=download_paths, archive_save_path=arhcive_path)
+
+            await update.message.edit_text(get_message(lang=lang, key='Uploading'))
+            with open (arhcive_path, 'rb') as f:
+                await update.message.reply_document(document=f, filename=context.user_data['archive_name'])
+
+            await db.mark_files_archived(user_id = update.effective_user.id)
+
+       except Excaption as e:
+           print (f'compression failed: {e}')
+           await update.message.reply_text(get_message(lang = lang, key = 'Compression_failed'))
+
+        finally:
+            if os.path.exists(tmp_dir_files): shutil.rmtree(tmp_dir_files, ignore_errors=True)
+            if os.path.exists(arhcive_path): os.remove(arhcive_path)
+
+    return ConversationHandler.END
+
+
+
+
+                
+
+                
 
 
 
