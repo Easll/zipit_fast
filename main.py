@@ -1,8 +1,8 @@
 import os
 from dotenv import load_dotenv
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ConversationHandler, MessageHandler, filters
 from handlers.start import start, help, show_lang, inline_start
-from handlers.zip import get_files, add_files 
+from handlers.zip import ASKING_FOR_ARCHIVE_NAME, ASKING_FOR_ENCRYPTION, ask_for_password, get_files, add_files, ask_for_archive_name, ask_for_password, recive_archive_name, build_archive_encrypted, build_archive_un_encrypted, cancel_compression
 import asyncio
 from database import Database
 
@@ -33,6 +33,17 @@ def main():
     app.add_handler(CallbackQueryHandler(inline_start, pattern='^start_'))
 
     app.add_handler(CommandHandler('show_files', get_files))
+    app.add_handler(ConversationHandler(
+        entry_points=[CommandHandler('compress', ask_for_archive_name)],
+        states={
+            ASKING_FOR_ARCHIVE_NAME:[MessageHandler(filters.Text & ~filters.filters.Command, recive_archive_name)],
+            ASKING_FOR_ENCRYPTION:[
+                CommandHandler('encrypt', ask_for_password),
+                CommandHandler('dont_encrypt', build_archive_un_encrypted)],
+            ASKING_FOR_PASSWORD:[MessageHandler(filters.Text & ~filters.Command, build_archive_encrypted)]},
+        fallbacks=[CommandHandler('cancel', cancel_compression)]
+        )) 
+
     app.add_handler(MessageHandler(filters.ATTACHMENT, add_files))
 
 

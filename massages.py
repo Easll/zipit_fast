@@ -1,5 +1,8 @@
 #English messages
 
+from handlers.zip import ASKING_FOR_ARCHIVE_NAME
+
+
 EN_WELCOME = """
 Hi!
 
@@ -45,6 +48,36 @@ EN_SHOW_PENDING_FILES_II ="""
 Name: {name}
 Size: {size}
 """
+
+EN_ASKING_FOR_ARCHIVE_NAME ="""
+Please enter a name for your archive
+"""
+
+EN_ASKING_FOR_ENCRYPTION = """
+Do you want your archive to be encrypted?
+"""
+
+EN_ASKING_FOR_PASSWORD = """
+Please enter a password for your archive
+"""
+
+EN_STARTING_COMPRESSION = """
+Downloading ..."""
+
+EN_COMPRESSING = """
+Compressing ..."""
+
+EN_UPLOADING = """
+Uploading ..."""
+
+EN_COMPRESSION_FAILED = """
+Compression failed. Please try again.
+"""
+
+EN_COMPRESSION_CANCELED = """
+Operation canceled."""
+
+
 
 #Farsi messages
 
@@ -100,6 +133,34 @@ FAS_SHOW_PENDING_FILES_II = """
 """
 
 
+FAS_ASKING_FOR_ARCHIVE_NAME ="""
+لطفا برای آرشیو خود یک نام انتخاب کنید:"""
+
+
+FAS_ASKING_FOR_ENCRYPTION = """
+آیا می خواهید آرشیو شما رمزنگاری شده باشد؟
+"""
+
+
+FAS_ASKING_FOR_PASSWORD = """
+لطفا برای آرشیو خود یک رمز انتخاب کنید:"""
+
+FAS_STARTING_COMPRESSION ="""
+در حال دانلود ..."""
+
+FAS_COMPRESSING = """
+در حال فشرده سازی ..."""
+
+FAS_UPLOADING = """
+در حال آپلود ..."""
+
+FAS_COMPRESSION_FAILED = """
+فشرده سازی شکست خورد. دوباره تلاش کنید."""
+
+FAS_COMPRESSION_CANCELED = """
+عملیات لغو شد."""
+
+
 #The dictionary
 
 
@@ -113,6 +174,14 @@ MESSAGES = {
         'Metadata_added': EN_METADATA_ADDED,
         'Show_pending_files_I': EN_SHOW_PENDING_FILES_I,
         'Show_pending_files_II': EN_SHOW_PENDING_FILES_II,
+        'Ask_for_archive_name': EN_ASKING_FOR_ARCHIVE_NAME,
+        'Ask_for_encryption': EN_ASKING_FOR_ENCRYPTION,
+        'Ask_for_password': EN_ASKING_FOR_PASSWORD,
+        'Starting_compression': EN_STARTING_COMPRESSION,
+        'Compressing': EN_COMPRESSING,
+        'Uploading': EN_UPLOADING,
+        'Compression_failed': EN_COMPRESSION_FAILED,
+        'Compression_canceled': EN_COMPRESSION_CANCELED,
     },
 
     'fas': {
@@ -124,6 +193,14 @@ MESSAGES = {
         'Metadata_added' : FAS_METADATA_ADDED,
         'Show_pending_files_I': FAS_SHOW_PENDING_FILES_I,
         'Show_pending_files_II': FAS_SHOW_PENDING_FILES_II,
+        'Ask_for_archive_name': FAS_ASKING_FOR_ARCHIVE_NAME,
+        'Ask_for_encryption': FAS_ASKING_FOR_ENCRYPTION,
+        'Ask_for_password': FAS_ASKING_FOR_PASSWORD,
+        'Starting_compression': FAS_STARTING_COMPRESSION,
+        'Compressing': FAS_COMPRESSING,
+        'Uploading': FAS_UPLOADING,
+        'Compression_failed': FAS_COMPRESSION_FAILED,
+        'Compression_canceled': FAS_COMPRESSION_CANCELED,
     }
 }
 

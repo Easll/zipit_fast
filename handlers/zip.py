@@ -12,7 +12,6 @@ import massages
 from utils import identify_files, bytes_to_kb, build_archive
 from massages import get_message
 import os
-
 import utils
 
 ASKING_FOR_ARCHIVE_NAME = 1
@@ -67,7 +66,7 @@ async def recive_archive_name (update: Update, context: ContextTypes.DEFAULT_TYP
     archive_name = update.message.text
     context.user_data['archive_name'] = archive_name
 
-    await update.message.reply_text(get_message(lang=lang, key='Archive_name_recived'))
+    await update.message.reply_text(get_message(lang=lang, key='Ask_for_encryption'))
     return ASKING_FOR_ENCRYPTION
 
 
@@ -87,7 +86,7 @@ async def build_archive_encrypted (update: Update, context: ContextTypes.DEFAULT
     password = update.message.text
     context.user_data['password'] = password
 
-    await update.message.reply_text(get_message(lang=lang, key='Password_recived_start_compression'))
+    await update.message.reply_text(get_message(lang=lang, key='Starting_compression'))
     
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     tmp_dir_files = os.path.join(project_root, 'tmp_files', f"to_be_compressed_{update.effective_user.id}_{uuid4().hex}")
@@ -128,7 +127,7 @@ async def build_archive_encrypted (update: Update, context: ContextTypes.DEFAULT
         finally:
             if os.path.exists(tmp_dir_files): shutil.rmtree(tmp_dir_files, ignore_errors=True)
             if os.path.exists(arhcive_path): os.remove(arhcive_path)
-
+    context.user_data.clear()
     return ConversationHandler.END
 
 
@@ -136,7 +135,7 @@ async def build_archive_un_encrypted (update: Update, context: ContextTypes.DEFA
     db = context.bot_data['db']
     lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
 
-    await update.message.reply_text(get_message(lang=lang, key='Start_comression'))
+    await update.message.reply_text(get_message(lang=lang, key='Starting_compression'))
     
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     tmp_dir_files = os.path.join(project_root, 'tmp_files', f"to_be_compressed_{update.effective_user.id}_{uuid4().hex}")
@@ -177,11 +176,17 @@ async def build_archive_un_encrypted (update: Update, context: ContextTypes.DEFA
         finally:
             if os.path.exists(tmp_dir_files): shutil.rmtree(tmp_dir_files, ignore_errors=True)
             if os.path.exists(arhcive_path): os.remove(arhcive_path)
-
+    context.user_data.clear()
     return ConversationHandler.END
 
 
+async def cancel_compression (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
 
+    await update.message.reply_text(get_message(lang= lang, key='compression_canceled'))
+    context.user_data.clear()
+    return ConversationHandler.END
 
                 
 
