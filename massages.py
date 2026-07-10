@@ -1,6 +1,5 @@
 #English messages
 
-from handlers.zip import ASKING_FOR_ARCHIVE_NAME
 
 
 EN_WELCOME = """

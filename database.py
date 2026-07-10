@@ -95,7 +95,7 @@ class Database:
 
     async def mark_files_archived (self, user_id):
         async with self._lock:
-            self.conn.execute(
+            await self.conn.execute(
             """UPDATE compression_files 
                SET status = 'archived' 
                WHERE user_id = ? AND status = 'pending'""",
