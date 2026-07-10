@@ -111,6 +111,7 @@ async def build_archive_encrypted (update: Update, context: ContextTypes.DEFAULT
                    seen_names[local_path] = 0
 
                await tg_file.download_to_drive(custom_path=local_path)
+               download_paths.append(local_path)
 
            bot_message = await bot_message.edit_text(get_message(lang=lang, key='Compressing'))
            await build_archive(file_paths=download_paths, archive_save_path=arhcive_path, password=password)
