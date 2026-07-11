@@ -55,9 +55,14 @@ async def get_files (update:Update, context: ContextTypes.DEFAULT_TYPE):
 async def ask_for_archive_name (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
     lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
-
-    await update.message.reply_text(get_message(lang=lang, key='Ask_for_archive_name'))
-    return ASKING_FOR_ARCHIVE_NAME
+    
+    pending_files = await db.get_pending_files(user_id = update.effective_user.id)
+    if pending_files:
+        await update.message.reply_text(get_message(lang=lang, key='Ask_for_archive_name'))
+        return ASKING_FOR_ARCHIVE_NAME
+    else:
+        await update.message.reply_text(get_message(lang= lang, key= 'No_pending_files'))
+        return ConversationHandler.END
 
 async def recive_archive_name (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']

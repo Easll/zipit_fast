@@ -76,7 +76,9 @@ Compression failed. Please try again.
 EN_COMPRESSION_CANCELED = """
 Operation canceled."""
 
-
+EN_NO_PENDING_FILES = """
+You have no un-archived files
+"""
 
 #Farsi messages
 
@@ -159,7 +161,9 @@ FAS_COMPRESSION_FAILED = """
 FAS_COMPRESSION_CANCELED = """
 عملیات لغو شد."""
 
-
+FAS_NO_PENDING_FILES = """
+فایل آرشیو نشده ای ندارید
+"""
 #The dictionary
 
 
@@ -181,6 +185,7 @@ MESSAGES = {
         'Uploading': EN_UPLOADING,
         'Compression_failed': EN_COMPRESSION_FAILED,
         'Compression_canceled': EN_COMPRESSION_CANCELED,
+        'No_pending_files': EN_NO_PENDING_FILES,
     },
 
     'fas': {
@@ -200,6 +205,7 @@ MESSAGES = {
         'Uploading': FAS_UPLOADING,
         'Compression_failed': FAS_COMPRESSION_FAILED,
         'Compression_canceled': FAS_COMPRESSION_CANCELED,
+        'No_pending_files': FAS_NO_PENDING_FILES,
     }
 }
 
