@@ -137,7 +137,7 @@ async def build_archive_un_encrypted (update: Update, context: ContextTypes.DEFA
     db = context.bot_data['db']
     lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
 
-    await update.message.reply_text(get_message(lang=lang, key='Starting_compression'))
+    bot_message = await update.message.reply_text(get_message(lang=lang, key='Starting_compression'))
     
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     tmp_dir_files = os.path.join(project_root, 'tmp_files', f"to_be_compressed_{update.effective_user.id}_{uuid4().hex}")
@@ -148,6 +148,7 @@ async def build_archive_un_encrypted (update: Update, context: ContextTypes.DEFA
 
     async with COMPRESSION_SEMAPHORE:
        try:
+           os.makedirs(tmp_dir_files, exist_ok=True)
            seen_names = {}
            for file in pending_files:
                tg_file = await context.bot.get_file(file['file_id']) 
@@ -161,13 +162,14 @@ async def build_archive_un_encrypted (update: Update, context: ContextTypes.DEFA
                    seen_names[local_path] = 0
 
                await tg_file.download_to_drive(custom_path=local_path)
+               download_paths.append(local_path)
 
-           await update.message.edit_text(get_message(lang=lang, key='Compressing'))
+           bot_message = await bot_message.edit_text(get_message(lang=lang, key='Compressing'))
            await build_archive(file_paths=download_paths, archive_save_path=arhcive_path)
 
-           await update.message.edit_text(get_message(lang=lang, key='Uploading'))
+           await bot_message.edit_text(get_message(lang=lang, key='Uploading'))
            with open (arhcive_path, 'rb') as f:
-               await update.message.reply_document(document=f, filename=context.user_data['archive_name'])
+               await update.message.reply_document(document=f, filename=f"{context.user_data['archive_name']}.zip")
 
            await db.mark_files_archived(user_id = update.effective_user.id)
 
