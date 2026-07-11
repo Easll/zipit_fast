@@ -9,7 +9,7 @@ from telegram.ext import ContextTypes, ConversationHandler
 from massages import get_message
 import keyboard
 import massages
-from utils import identify_files, bytes_to_kb, build_archive
+from utils import identify_files, bytes_to_kb, build_archive, check_file_size, check_total_size
 from massages import get_message
 import os
 import utils
@@ -23,19 +23,22 @@ async def add_files (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
     lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
 
-    await update.message.reply_text(get_message(lang=lang, key= 'Extracting_metadata'))
+    bot_message = await update.message.reply_text(get_message(lang=lang, key= 'Extracting_metadata'))
 
     metadata = identify_files(update.message)
-
-    await db.add_pending_file(
-            user_id = update.effective_user.id, 
-            name = metadata['name'],
-            file_id = metadata['file_id'],
-            unique_id = metadata['unique_id'],
-            size = metadata['size']
-            ) 
     
-    await update.message.reply_text(get_message(lang=lang, key= 'Metadata_added').format(name = metadata['name'], size = str(bytes_to_kb(metadata['size']))))
+    if check_file_size(file_size=metadata['size']):
+        await db.add_pending_file(
+                user_id = update.effective_user.id, 
+                name = metadata['name'],
+                file_id = metadata['file_id'],
+                unique_id = metadata['unique_id'],
+                size = metadata['size']
+                ) 
+    
+        await bot_message.edit_text(get_message(lang=lang, key= 'Metadata_added').format(name = metadata['name'], size = str(bytes_to_kb(metadata['size']))))
+    else:
+        await update.message.reply_text(get_message(lang=lang, key='File_too_big'))
 
 
 async def get_files (update:Update, context: ContextTypes.DEFAULT_TYPE):
@@ -58,8 +61,12 @@ async def ask_for_archive_name (update: Update, context: ContextTypes.DEFAULT_TY
     
     pending_files = await db.get_pending_files(user_id = update.effective_user.id)
     if pending_files:
-        await update.message.reply_text(get_message(lang=lang, key='Ask_for_archive_name'))
-        return ASKING_FOR_ARCHIVE_NAME
+        if check_total_size(files=pending_files):
+            await update.message.reply_text(get_message(lang=lang, key='Ask_for_archive_name'))
+            return ASKING_FOR_ARCHIVE_NAME
+        else:
+            await update.message.reply_text(get_message(lang=lang, key='Archive_too_big'))
+            return ConversationHandler.END
     else:
         await update.message.reply_text(get_message(lang= lang, key= 'No_pending_files'))
         return ConversationHandler.END

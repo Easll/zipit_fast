@@ -80,6 +80,12 @@ EN_NO_PENDING_FILES = """
 You have no un-archived files
 """
 
+EN_FILE_TOO_BIG = """
+Error: The bot is currently in Test and cannot download files bigger than 20 MB
+"""
+
+EN_ARCHIVE_TOO_BIG = """
+Error: The total size of your archive will exceed 50 MB. The bot is currently in test and cannot upload files bigget than 50 MB"""
 #Farsi messages
 
 FAS_WELCOME = """
@@ -164,6 +170,12 @@ FAS_COMPRESSION_CANCELED = """
 FAS_NO_PENDING_FILES = """
 فایل آرشیو نشده ای ندارید
 """
+
+FAS_FILE_TOO_BIG = """
+مشکل: بات در حال احضر در مرحله تست قرار دارد و نمی تواند فایل های بیشتر از 20 مگابایت را دانلود کند."""
+
+FAS_ARCHIVE_TOO_BIG = """
+مشکل: حجم آرشیو شما از 50 مگابایت فراتر رفته است.  بات در حال حاضر در مرحله تست قرار دارد و نمی تواند آرشیو های بیشتر از 50 مگابایت را آپلود کند."""
 #The dictionary
 
 
@@ -186,6 +198,8 @@ MESSAGES = {
         'Compression_failed': EN_COMPRESSION_FAILED,
         'Compression_canceled': EN_COMPRESSION_CANCELED,
         'No_pending_files': EN_NO_PENDING_FILES,
+        'File_too_big': EN_FILE_TOO_BIG,
+        'Archive_too_big': EN_ARCHIVE_TOO_BIG,
     },
 
     'fas': {
@@ -206,6 +220,8 @@ MESSAGES = {
         'Compression_failed': FAS_COMPRESSION_FAILED,
         'Compression_canceled': FAS_COMPRESSION_CANCELED,
         'No_pending_files': FAS_NO_PENDING_FILES,
+        'File_too_big': FAS_FILE_TOO_BIG,
+        'Archive_too_big': FAS_ARCHIVE_TOO_BIG,
     }
 }
 

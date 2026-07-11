@@ -81,7 +81,7 @@ def bytes_to_kb (bt: int) -> str:
 def _build_archive (file_paths: list [str], archive_save_path: str, password: str | None = None):
     encryption = pyzipper.WZ_AES if password else None
     seen_names = {}
-    with pyzipper.AESZipFile(archive_save_path, 'w', compression = pyzipper.ZIP_DEFLATED, encryption = encryption) as zp:
+    with pyzipper.AESZipFile(archive_save_path, 'w', compression = pyzipper.ZIP_DEFLATED, encryption = encryption, allowZip64 = False) as zp:
         
         if password:
             zp.setpassword(password.encode('utf-8'))
@@ -106,15 +106,27 @@ def _build_archive (file_paths: list [str], archive_save_path: str, password: st
 
 async def build_archive  (file_paths: list [str], archive_save_path: str, password: str | None = None):
     await asyncio.to_thread(_build_archive, file_paths, archive_save_path, password)
-    
+ 
+ 
+def check_file_size (file_size : int):
+    if file_size > 20900000:
+        return False
+    return True
+
+
+def check_total_size (files : dict):
+    total_size = 0
+    for file in files:
+        total_size += file['file_size']
+    if total_size > 52400000:
+        return False
+    return True
 
 
 
 
 
-#def zip_it ()
 
-#def zip_them ()   
 
 
 
