@@ -232,3 +232,69 @@ def get_message (lang : str, key: str):
     lang_dict = MESSAGES.get(lang, 'en')
 
     return lang_dict.get(key, key)
+
+#Button Names
+
+#English
+
+BT_EN_LANGUAGE = 'Language'
+
+BT_EN_HELP = 'Help'
+
+BT_EN_SHOW_FILES = 'Pending Files'
+
+BT_EN_COMPRESS = 'Compress'
+
+BT_EN_CANCEL_COMPRESSION = 'Cancle'
+
+BT_EN_ENCRYPT = 'Encyrpted'
+
+BT_EN_DONT_ENCRYPT = 'Non Encrypted'
+
+#Farsi
+
+BT_FAS_LANGUAGE = 'زبان'
+
+BT_FAS_HELP = 'راهنمایی'
+
+BT_FAS_SHOW_FILES = 'فایل های در انتظار'
+
+BT_FAS_COMPRESS = 'فشرده سازی'
+
+BT_FAS_CANCEL_COMPRESSION = 'لغو'
+
+BT_FAS_ENCRYPT = 'با رمزنگاری'
+
+BT_FAS_DONT_ENCRYPT = 'بدون رمزنگاری'
+
+
+#Button dictionary
+
+BUTTONS = {
+        'en': {
+            'Language' : BT_EN_LANGUAGE,
+            'Help' : BT_EN_HELP,
+            'Show_files' : BT_EN_SHOW_FILES,
+            'Compress' : BT_EN_COMPRESS,
+            'Cnacel_compression' : BT_EN_CANCEL_COMPRESSION,
+            'Encrypt' : BT_EN_ENCRYPT,
+            'Dont_encrypt' : BT_EN_DONT_ENCRYPT,
+            },
+        'fas': {
+            'Language' : BT_FAS_LANGUAGE,
+            'Help' : BT_FAS_HELP,
+            'Show_files' : BT_FAS_SHOW_FILES,
+            'Compress' : BT_FAS_COMPRESS,
+            'Cnacel_compression' : BT_FAS_CANCEL_COMPRESSION,
+            'Encrypt' : BT_FAS_ENCRYPT,
+            'Dont_encrypt' : BT_FAS_DONT_ENCRYPT,
+            },
+        }
+
+#Button dict function
+
+def get_button_name (lang: str, key: str):
+    Bt_dict = BUTTONS.get (lang, 'en')
+
+    return Bt_dict.get(key, key)
+
