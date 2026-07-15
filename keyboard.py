@@ -1,12 +1,15 @@
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove
-
+from massages import get_button_name
 
 # under the start message
-def get_greet_buttons ():
+def get_greet_buttons (lang: str):
     keyboard = [
         [
             InlineKeyboardButton(text='🅰 Language | زبان', callback_data='start_language'),
-            InlineKeyboardButton(text='🔴 Help | راهنما', callback_data='start_help')
+            InlineKeyboardButton(text='🔴 Help ', callback_data='start_help')
+        ],
+        [
+            InlineKeyboardButton(text= get_button_name(lang = lang, key = 'Show_files'), callback_data='zipnoconv_show_files'),
         ]
     ]
 
@@ -22,3 +25,6 @@ def get_lang_buttons ():
     ]
 
     return InlineKeyboardMarkup(keyboard)
+
+
+

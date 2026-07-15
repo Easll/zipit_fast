@@ -21,7 +21,7 @@ ASKING_FOR_PASSWORD = 3
 
 async def add_files (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
-    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
 
     bot_message = await update.message.reply_text(get_message(lang=lang, key= 'Extracting_metadata'))
 
@@ -41,35 +41,46 @@ async def add_files (update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(get_message(lang=lang, key='File_too_big'))
 
 
-async def get_files (update:Update, context: ContextTypes.DEFAULT_TYPE):
+async def _get_files_logic (user_id, reply_func, context: ContextTypes.DEFAULT_TYPE):
     
     db = context.bot_data['db']
-    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    lang = context.user_data.get ('lang', await db.get_language(user_id))
     
-    data_dictionary = await db.get_pending_files(user_id = update.effective_user.id)
+    data_dictionary = await db.get_pending_files(user_id = user_id)
     
     message_text = f"{get_message(lang=lang, key = 'Show_pending_files_I')} \n ===================== \n"
     count = 0
     for row in data_dictionary:
         count = count + 1
         message_text = message_text +f'({count}) \n'+ get_message(lang = lang, key = 'Show_pending_files_II').format(name = row['file_name'], size = bytes_to_kb(row['file_size'])) + '\n ===================== \n'
-    await update.message.reply_text(message_text)
 
-async def ask_for_archive_name (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await reply_func(message_text)
+
+
+async def get_files (update : Update, context: ContextTypes.DEFAULT_TYPE):
+    await _get_files_logic(user_id= update.effective_user.id, reply_func= update.message.reply_text, context= context)
+
+
+
+async def _ask_for_archive_name_logic (user_id, reply_func, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
-    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    lang = context.user_data.get ('lang', await db.get_language(user_id))
     
-    pending_files = await db.get_pending_files(user_id = update.effective_user.id)
+    pending_files = await db.get_pending_files(user_id = user_id)
     if pending_files:
         if check_total_size(files=pending_files):
-            await update.message.reply_text(get_message(lang=lang, key='Ask_for_archive_name'))
+            await reply_func(get_message(lang=lang, key='Ask_for_archive_name'))
             return ASKING_FOR_ARCHIVE_NAME
         else:
-            await update.message.reply_text(get_message(lang=lang, key='Archive_too_big'))
+            await reply_func(get_message(lang=lang, key='Archive_too_big'))
             return ConversationHandler.END
     else:
-        await update.message.reply_text(get_message(lang= lang, key= 'No_pending_files'))
+        await reply_func(get_message(lang= lang, key= 'No_pending_files'))
         return ConversationHandler.END
+
+async def ask_for_archive_name (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await _ask_for_archive_name_logic(user_id= update.effective_user.id, reply_func= update.message.reply_text, context= context)
+
 
 async def recive_archive_name (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
@@ -82,12 +93,16 @@ async def recive_archive_name (update: Update, context: ContextTypes.DEFAULT_TYP
     return ASKING_FOR_ENCRYPTION
 
 
-async def ask_for_password (update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def _ask_for_password_logic (user_id, reply_func, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
-    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    lang = context.user_data.get ('db', await db.get_language(user_id))
 
-    await update.message.reply_text(get_message(lang=lang, key='Ask_for_password')) 
+    await reply_func(get_message(lang=lang, key='Ask_for_password')) 
     return ASKING_FOR_PASSWORD
+
+async def ask_for_password (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await _ask_for_password_logic (user_id= update.effective_user.id, reply_func= update.message.reply_text, context= context)
+
 
 COMPRESSION_SEMAPHORE = asyncio.Semaphore(2)
 
@@ -207,6 +222,15 @@ async def cancel_compression (update: Update, context: ContextTypes.DEFAULT_TYPE
                 
 
                 
+async def inline_show_files (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    
+    query = update.callback_query
+    await query.answer()
+
+    if query.data == 'zipnoconv_show_files':
+        await _get_files_logic(user_id= update.effective_user.id, reply_func= query.message.reply_text, context = context)
 
 
 

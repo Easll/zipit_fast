@@ -12,12 +12,12 @@ async def start (update : Update, context : ContextTypes.DEFAULT_TYPE):
     lang = await db.get_language (user_id)
     context.user_data['lang'] = lang
 
-    await update.message.reply_text(get_message(lang, 'Welcome'), reply_markup=keyboard.get_greet_buttons())
+    await update.message.reply_text(get_message(lang, 'Welcome'), reply_markup=keyboard.get_greet_buttons(lang = lang))
 
 
 async def help (update: Update, context):
     db = context.bot_data['db']
-    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
     await update.message.reply_text(get_message(lang, 'Help'))
 
 async def inline_start (update: Update, context):
@@ -26,7 +26,7 @@ async def inline_start (update: Update, context):
 
     db = context.bot_data['db']
 
-    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
 
     if quary.data == 'start_help':
         await quary.edit_message_text(get_message(lang, 'Help'))
@@ -51,5 +51,5 @@ async def inline_start (update: Update, context):
 
 async def show_lang (update: Update, context):
     db = context.bot_data['db']
-    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
     await update.message.reply_text(get_message(lang, 'Show_lang'), reply_markup=keyboard.get_lang_buttons())

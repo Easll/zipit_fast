@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ConversationHandler, MessageHandler, filters
 from handlers.start import start, help, show_lang, inline_start
-from handlers.zip import ASKING_FOR_ARCHIVE_NAME, ASKING_FOR_ENCRYPTION, ASKING_FOR_PASSWORD, ask_for_password, get_files, add_files, ask_for_archive_name, ask_for_password, recive_archive_name, build_archive_encrypted, build_archive_un_encrypted, cancel_compression
+from handlers.zip import ASKING_FOR_ARCHIVE_NAME, ASKING_FOR_ENCRYPTION, ASKING_FOR_PASSWORD, ask_for_password, get_files, add_files, ask_for_archive_name, ask_for_password, recive_archive_name, build_archive_encrypted, build_archive_un_encrypted, cancel_compression, inline_show_files
 import asyncio
 from database import Database
 
@@ -31,6 +31,7 @@ def main():
     app.add_handler(CommandHandler('language', show_lang))
 
     app.add_handler(CallbackQueryHandler(inline_start, pattern='^start_'))
+    app.add_handler(CallbackQueryHandler(inline_show_files, pattern= '^zipnoconv_'))
 
     app.add_handler(CommandHandler('show_files', get_files))
     app.add_handler(ConversationHandler(
