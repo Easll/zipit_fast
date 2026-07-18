@@ -54,7 +54,7 @@ async def _get_files_logic (user_id, reply_func, context: ContextTypes.DEFAULT_T
         count = count + 1
         message_text = message_text +f'({count}) \n'+ get_message(lang = lang, key = 'Show_pending_files_II').format(name = row['file_name'], size = bytes_to_kb(row['file_size'])) + '\n ===================== \n'
 
-    await reply_func(message_text)
+    await reply_func(message_text, reply_markup = keyboard.get_pending_files_buttons(lang= lang))
 
 
 async def get_files (update : Update, context: ContextTypes.DEFAULT_TYPE):
@@ -69,7 +69,7 @@ async def _ask_for_archive_name_logic (user_id, reply_func, context: ContextType
     pending_files = await db.get_pending_files(user_id = user_id)
     if pending_files:
         if check_total_size(files=pending_files):
-            await reply_func(get_message(lang=lang, key='Ask_for_archive_name'))
+            await reply_func(get_message(lang=lang, key='Ask_for_archive_name'), reply_markup = keyboard.get_cancel_button(lang= lang))
             return ASKING_FOR_ARCHIVE_NAME
         else:
             await reply_func(get_message(lang=lang, key='Archive_too_big'))
@@ -79,36 +79,36 @@ async def _ask_for_archive_name_logic (user_id, reply_func, context: ContextType
         return ConversationHandler.END
 
 async def ask_for_archive_name (update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await _ask_for_archive_name_logic(user_id= update.effective_user.id, reply_func= update.message.reply_text, context= context)
+    return (await _ask_for_archive_name_logic(user_id= update.effective_user.id, reply_func= update.message.reply_text, context= context))
 
 
 async def recive_archive_name (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
-    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
 
     archive_name = update.message.text
     context.user_data['archive_name'] = archive_name
 
-    await update.message.reply_text(get_message(lang=lang, key='Ask_for_encryption'))
+    await update.message.reply_text(get_message(lang=lang, key='Ask_for_encryption'), reply_markup= keyboard.get_ask_for_encryption_buttons(lang= lang))
     return ASKING_FOR_ENCRYPTION
 
 
 async def _ask_for_password_logic (user_id, reply_func, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
-    lang = context.user_data.get ('db', await db.get_language(user_id))
+    lang = context.user_data.get ('lang', await db.get_language(user_id))
 
-    await reply_func(get_message(lang=lang, key='Ask_for_password')) 
+    await reply_func(get_message(lang=lang, key='Ask_for_password'), reply_markup = keyboard.get_cancel_button(lang= lang)) 
     return ASKING_FOR_PASSWORD
 
 async def ask_for_password (update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await _ask_for_password_logic (user_id= update.effective_user.id, reply_func= update.message.reply_text, context= context)
+    return (await _ask_for_password_logic (user_id= update.effective_user.id, reply_func= update.message.reply_text, context= context))
 
 
 COMPRESSION_SEMAPHORE = asyncio.Semaphore(2)
 
 async def build_archive_encrypted (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
-    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
 
     password = update.message.text
     context.user_data['password'] = password
@@ -162,7 +162,7 @@ async def build_archive_encrypted (update: Update, context: ContextTypes.DEFAULT
 
 async def build_archive_un_encrypted (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
-    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
 
     bot_message = await update.message.reply_text(get_message(lang=lang, key='Starting_compression'))
     
@@ -211,26 +211,39 @@ async def build_archive_un_encrypted (update: Update, context: ContextTypes.DEFA
     return ConversationHandler.END
 
 
-async def cancel_compression (update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def _cancel_compression_logic (user_id, reply_func, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
-    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    lang = context.user_data.get ('lang', await db.get_language(user_id))
 
-    await update.message.reply_text(get_message(lang= lang, key='compression_canceled'))
+    await reply_func(get_message(lang= lang, key='Compression_canceled'))
     context.user_data.clear()
     return ConversationHandler.END
 
+
+async def cancel_compression (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    return (await _cancel_compression_logic(user_id= update.effective_user.id, reply_func= update.message.reply_text, context = context))
                 
 
                 
 async def inline_show_files (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
-    lang = context.user_data.get ('db', await db.get_language(update.effective_user.id))
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
     
     query = update.callback_query
     await query.answer()
 
     if query.data == 'zipnoconv_show_files':
         await _get_files_logic(user_id= update.effective_user.id, reply_func= query.message.reply_text, context = context)
+
+    elif query.data == 'zipnoconv_compress':
+        return (await _ask_for_archive_name_logic(user_id= update.effective_user.id, reply_func= query.message.reply_text, context = context))
+
+    elif query.data == 'zipnoconv_cancel_compression':
+        return (await _cancel_compression_logic (user_id= update.effective_user.id, reply_func= query.message.reply_text, context = context))
+
+    elif query.data == 'zipnoconv_encrypt':
+        return (await _ask_for_password_logic(user_id= update.effective_user.id, reply_func= query.message.reply_text, context = context))
+
 
 
 
