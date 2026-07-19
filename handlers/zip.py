@@ -235,14 +235,44 @@ async def inline_show_files (update: Update, context: ContextTypes.DEFAULT_TYPE)
     if query.data == 'zipnoconv_show_files':
         await _get_files_logic(user_id= update.effective_user.id, reply_func= query.message.reply_text, context = context)
 
-    elif query.data == 'zipnoconv_compress':
+
+
+async def inline_start_compression (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
+     
+    query = update.callback_query
+    await query.answer()
+
+    if query.data == 'zipstartconv':
         return (await _ask_for_archive_name_logic(user_id= update.effective_user.id, reply_func= query.message.reply_text, context = context))
 
-    elif query.data == 'zipnoconv_cancel_compression':
+
+
+async def inline_cancel_compression (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
+     
+    query = update.callback_query
+    await query.answer()
+
+    if query.data == 'zipcancelconv_cancel_compression':
         return (await _cancel_compression_logic (user_id= update.effective_user.id, reply_func= query.message.reply_text, context = context))
 
-    elif query.data == 'zipnoconv_encrypt':
+
+
+
+async def inline_compression_flow(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
+     
+    query = update.callback_query
+    await query.answer()
+
+    if query.data == 'zipconv_encrypt':
         return (await _ask_for_password_logic(user_id= update.effective_user.id, reply_func= query.message.reply_text, context = context))
+
+#    elif query.data == 'zipconv_dont_encrypt':
 
 
 

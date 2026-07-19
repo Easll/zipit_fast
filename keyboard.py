@@ -30,7 +30,7 @@ def get_lang_buttons ():
 def get_pending_files_buttons (lang: str):
     keyboard = [
             [
-                InlineKeyboardButton(text = get_button_name(lang = lang, key = 'Compress'), callback_data= 'zipnoconv_compress'),
+                InlineKeyboardButton(text = get_button_name(lang = lang, key = 'Compress'), callback_data= 'zipstartconv'),
                 ],
             ]
     return InlineKeyboardMarkup(keyboard)
@@ -38,7 +38,7 @@ def get_pending_files_buttons (lang: str):
 def get_cancel_button (lang: str):
     keyboard = [
             [
-                InlineKeyboardButton(text= get_button_name(lang = lang, key = 'Cancel_compression'), callback_data= 'zipnoconv_cancel_compression'),
+                InlineKeyboardButton(text= get_button_name(lang = lang, key = 'Cancel_compression'), callback_data= 'zipcancelconv_cancel_compression'),
                 ],
             ]
 
@@ -47,11 +47,11 @@ def get_cancel_button (lang: str):
 def get_ask_for_encryption_buttons (lang: str):
     keyboard = [
             [
-                InlineKeyboardButton(text= get_button_name(lang = lang, key = 'Encrypt'), callback_data= 'zipnoconv_encrypt'),
-                InlineKeyboardButton(text= get_button_name(lang = lang, key = 'Dont_encrypt'), callback_data= 'zipnoconv_dont_encrypt'),
+                InlineKeyboardButton(text= get_button_name(lang = lang, key = 'Encrypt'), callback_data= 'zipconv_encrypt'),
+                InlineKeyboardButton(text= get_button_name(lang = lang, key = 'Dont_encrypt'), callback_data= 'zipconv_dont_encrypt'),
                 ],
             [
-                InlineKeyboardButton(text= get_button_name(lang = lang, key = 'Cancel_compression'), callback_data= 'zipnoconv_cancel_compression'),
+                InlineKeyboardButton(text= get_button_name(lang = lang, key = 'Cancel_compression'), callback_data= 'zipcancelconv_cancel_compression'),
                 ],
             ]
 
