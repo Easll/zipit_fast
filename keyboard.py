@@ -56,3 +56,13 @@ def get_ask_for_encryption_buttons (lang: str):
             ]
 
     return InlineKeyboardMarkup(keyboard)
+
+
+def get_remove_buttons (files: dict):
+    buttons = []
+    for file in files:
+        button = [InlineKeyboardButton(text= f"{file['file_name']}", callback_data= f"zipremove_{file['id']}")]
+        buttons.append(button)
+
+    keyboard = buttons
+    return InlineKeyboardMarkup(keyboard)

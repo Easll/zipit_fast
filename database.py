@@ -102,6 +102,15 @@ class Database:
                (user_id,))
             await self.conn.commit()
 
+    async def mark_file_canceled (self, file_db_id):
+        async with self._lock:
+            await self.conn.execute(
+                    """UPDATE compression_files
+                    SET status = 'canceled'
+                    WHERE id = ?""",
+                    (file_db_id))
+            await self.conn.commit()
+
 
     async def close(self):
         await self.conn.close()

@@ -86,6 +86,16 @@ Error: The bot is currently in Test and cannot download files bigger than 20 MB
 
 EN_ARCHIVE_TOO_BIG = """
 Error: The total size of your archive will exceed 50 MB. The bot is currently in test and cannot upload files bigget than 50 MB"""
+
+
+EN_REMOVE_OPTIONS = """
+Which file do you want to remove from your pending files? :
+"""
+
+EN_NO_REMOVE_OPTIONS = """
+You have no pending files to remove
+"""
+
 #Farsi messages
 
 FAS_WELCOME = """
@@ -176,6 +186,89 @@ FAS_FILE_TOO_BIG = """
 
 FAS_ARCHIVE_TOO_BIG = """
 مشکل: حجم آرشیو شما از 50 مگابایت فراتر رفته است.  بات در حال حاضر در مرحله تست قرار دارد و نمی تواند آرشیو های بیشتر از 50 مگابایت را آپلود کند."""
+
+
+FAS_REMOVE_OPTIONS = """
+کدوم فایل رو میخوای از لیست فایل هات حذف کنی؟ :
+"""
+
+FAS_NO_REMOVE_OPTIONS = """
+فایلی برای حذف کردن وجود ندارد.
+"""
+
+#Farsi messages
+
+FAS_WELCOME = """
+سلام!
+
+خوش اومدی!
+
+فایل هات رو برام بفرست تا اونها رو فشرده و ارسال کنم. (امکان رمزگذاری هم هست)
+
+/help برای راهنمایی
+
+/language برای تغییر زبان
+
+
+"""
+
+FAS_HELP = """
+این بخش در حال طراحی است
+
+"""
+
+FAS_SHOW_LANG = """
+زبان را انتخاب کنید
+
+"""
+
+FAS_CHOSE_FAS = """
+زبان فارسی انتخاب شد.
+
+همیشه می توانید زبان را از منوی اصلی تغییر دهید
+
+"""
+
+FAS_EXTRACTING_MEATDATA ="""
+استخراج مشخصات ...""" 
+
+FAS_METADATA_ADDED = """
+به فایل های شما افزوده شد. آماده برای فشرده سازی:
+
+نام: {name}
+
+اندازه:{size}
+"""
+
+FAS_SHOW_PENDING_FILES_I = """
+فایل های آرشیو نشده شما:
+"""
+
+FAS_SHOW_PENDING_FILES_II = """
+نام: {name}
+اندازه: {size}
+"""
+
+
+FAS_ASKING_FOR_ARCHIVE_NAME ="""
+لطفا برای آرشیو خود یک نام انتخاب کنید:"""
+
+
+FAS_ASKING_FOR_ENCRYPTION = """
+آیا می خواهید آرشیو شما رمزنگاری شده باشد؟
+"""
+
+
+FAS_ASKING_FOR_PASSWORD = """
+لطفا برای آرشیو خود یک رمز انتخاب کنید:"""
+
+FAS_STARTING_COMPRESSION ="""
+در حال دانلود ..."""
+
+FAS_COMPRESSING = """
+در حال فشرده سازی ..."""
+
+FAS_UPLOADING = """
 #The dictionary
 
 
@@ -200,6 +293,7 @@ MESSAGES = {
         'No_pending_files': EN_NO_PENDING_FILES,
         'File_too_big': EN_FILE_TOO_BIG,
         'Archive_too_big': EN_ARCHIVE_TOO_BIG,
+        'Remove_options': EN_REMOVE_OPTIONS,
     },
 
     'fas': {
@@ -222,6 +316,7 @@ MESSAGES = {
         'No_pending_files': FAS_NO_PENDING_FILES,
         'File_too_big': FAS_FILE_TOO_BIG,
         'Archive_too_big': FAS_ARCHIVE_TOO_BIG,
+        'Remove_options': FAS_REMOVE_OPTIONS,
     }
 }
 

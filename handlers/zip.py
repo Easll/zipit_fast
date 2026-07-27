@@ -62,6 +62,25 @@ async def get_files (update : Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
+async def _show_remove_buttons_logic (user_id, reply_func, context : ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('lang', await db.get_language(user_id))
+    
+    files = await db.get_pending_files(user_id = user_id)
+    
+    if files:
+        await reply_func(get_message(lang= lang, key= 'Remove_options'), reply_markup = keyboard.get_remove_buttons(files= files))
+
+    else:
+        await reply_func(get_message(lang = lang, key= 'No_remove_options'))
+
+
+
+async def show_remove_buttons (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await _show_remove_buttons_logic (user_id= update.effective_user.id, reply_func= update.message.reply_text, context = context)
+
+
+
 async def _ask_for_archive_name_logic (user_id, reply_func, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
     lang = context.user_data.get ('lang', await db.get_language(user_id))
