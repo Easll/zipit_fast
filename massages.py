@@ -93,9 +93,19 @@ Which file do you want to remove from your pending files? :
 """
 
 EN_NO_REMOVE_OPTIONS = """
-You have no pending files to remove
+You have no pending files to remove.
 """
 
+EN_FILE_REMOVED = """
+Removed Successfully.
+
+Which file do you want to remove from your pending files? :"""
+
+EN_FILE_REMOVED_NO_MORE = """
+Removed Successfully.
+
+You have no pending files to remove.
+"""
 #Farsi messages
 
 FAS_WELCOME = """
@@ -189,86 +199,26 @@ FAS_ARCHIVE_TOO_BIG = """
 
 
 FAS_REMOVE_OPTIONS = """
-کدوم فایل رو میخوای از لیست فایل هات حذف کنی؟ :
+کدام فایل رو میخواهید از لیست فایل هات حذف کنی؟ :
 """
 
 FAS_NO_REMOVE_OPTIONS = """
 فایلی برای حذف کردن وجود ندارد.
 """
 
-#Farsi messages
+FAS_FILE_REMOVED = """
+فایل با موفیت حذف شد .
 
-FAS_WELCOME = """
-سلام!
-
-خوش اومدی!
-
-فایل هات رو برام بفرست تا اونها رو فشرده و ارسال کنم. (امکان رمزگذاری هم هست)
-
-/help برای راهنمایی
-
-/language برای تغییر زبان
-
-
+کدام فایل را می خواید از لیست حذف کنید؟ :
 """
 
-FAS_HELP = """
-این بخش در حال طراحی است
+FAS_FILE_REMOVED_NO_MORE = """
+فایل با موفیت حذف شد .
 
-"""
-
-FAS_SHOW_LANG = """
-زبان را انتخاب کنید
-
-"""
-
-FAS_CHOSE_FAS = """
-زبان فارسی انتخاب شد.
-
-همیشه می توانید زبان را از منوی اصلی تغییر دهید
-
-"""
-
-FAS_EXTRACTING_MEATDATA ="""
-استخراج مشخصات ...""" 
-
-FAS_METADATA_ADDED = """
-به فایل های شما افزوده شد. آماده برای فشرده سازی:
-
-نام: {name}
-
-اندازه:{size}
-"""
-
-FAS_SHOW_PENDING_FILES_I = """
-فایل های آرشیو نشده شما:
-"""
-
-FAS_SHOW_PENDING_FILES_II = """
-نام: {name}
-اندازه: {size}
+فایلی برای حذف کردن وجود ندارد.
 """
 
 
-FAS_ASKING_FOR_ARCHIVE_NAME ="""
-لطفا برای آرشیو خود یک نام انتخاب کنید:"""
-
-
-FAS_ASKING_FOR_ENCRYPTION = """
-آیا می خواهید آرشیو شما رمزنگاری شده باشد؟
-"""
-
-
-FAS_ASKING_FOR_PASSWORD = """
-لطفا برای آرشیو خود یک رمز انتخاب کنید:"""
-
-FAS_STARTING_COMPRESSION ="""
-در حال دانلود ..."""
-
-FAS_COMPRESSING = """
-در حال فشرده سازی ..."""
-
-FAS_UPLOADING = """
 #The dictionary
 
 
@@ -294,6 +244,8 @@ MESSAGES = {
         'File_too_big': EN_FILE_TOO_BIG,
         'Archive_too_big': EN_ARCHIVE_TOO_BIG,
         'Remove_options': EN_REMOVE_OPTIONS,
+        'File_removed': EN_FILE_REMOVED,
+        'File_removed_no_more_files': EN_FILE_REMOVED_NO_MORE,
     },
 
     'fas': {
@@ -317,6 +269,8 @@ MESSAGES = {
         'File_too_big': FAS_FILE_TOO_BIG,
         'Archive_too_big': FAS_ARCHIVE_TOO_BIG,
         'Remove_options': FAS_REMOVE_OPTIONS,
+        'File_removed': FAS_FILE_REMOVED,
+        'File_removed_no_more_files': FAS_FILE_REMOVED_NO_MORE,
     }
 }
 

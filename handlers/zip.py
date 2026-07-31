@@ -62,23 +62,35 @@ async def get_files (update : Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
-async def _show_remove_buttons_logic (user_id, reply_func, context : ContextTypes.DEFAULT_TYPE):
+async def _show_remove_buttons_logic (user_id, reply_func, message_1: str, message_2: str, context : ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']
-    lang = context.user_data.get ('lang', await db.get_language(user_id))
     
     files = await db.get_pending_files(user_id = user_id)
     
     if files:
-        await reply_func(get_message(lang= lang, key= 'Remove_options'), reply_markup = keyboard.get_remove_buttons(files= files))
+        await reply_func(message_1, reply_markup = keyboard.get_remove_buttons(files= files))
 
     else:
-        await reply_func(get_message(lang = lang, key= 'No_remove_options'))
+        await reply_func(message_2)
 
 
 
 async def show_remove_buttons (update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await _show_remove_buttons_logic (user_id= update.effective_user.id, reply_func= update.message.reply_text, context = context)
+    db = context.bot_data['db']
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
+    message_1 = get_message(lang= lang, key = 'Remove_options')
+    message_2 = get_message(lang= lang, key= 'No_remove_options')
 
+    await _show_remove_buttons_logic (user_id= update.effective_user.id, reply_func= update.message.reply_text, message_1=message_1, message_2=message_2, context = context)
+
+
+
+async def _remove_file_logic (user_id, file_db_id, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('lang', await db.get_language(user_id))
+
+    await db.mark_file_canceled (file_db_id)
+ 
 
 
 async def _ask_for_archive_name_logic (user_id, reply_func, context: ContextTypes.DEFAULT_TYPE):
@@ -216,6 +228,31 @@ async def inline_show_files (update: Update, context: ContextTypes.DEFAULT_TYPE)
         await _get_files_logic(user_id= update.effective_user.id, reply_func= query.message.reply_text, context = context)
 
 
+
+async def inline_remove_file (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
+
+    query = update.callback_query
+    await query.answer()
+    
+    header, file_id = query.data.split('_', 1)
+    await _remove_file_logic(user_id=update.effective_user.id, file_db_id=file_id, context = context)
+
+    message_1 = get_message(lang= lang, key= 'File_removed')
+    message_2 = get_message(lang=lang, key= 'File_removed_no_more_files')
+
+    await _show_remove_buttons_logic(
+            user_id= update.effective_user.id,
+            reply_func= query.message.edit_text,
+            message_1 = message_1,
+            message_2 = message_2,
+            context= context)
+
+
+
+
+ 
 
 async def inline_start_compression (update: Update, context: ContextTypes.DEFAULT_TYPE):
     db = context.bot_data['db']

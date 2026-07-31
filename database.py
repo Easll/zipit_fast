@@ -108,7 +108,7 @@ class Database:
                     """UPDATE compression_files
                     SET status = 'canceled'
                     WHERE id = ?""",
-                    (file_db_id))
+                    (file_db_id,))
             await self.conn.commit()
 
 
