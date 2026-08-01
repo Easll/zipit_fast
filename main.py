@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ConversationHandler, MessageHandler, filters
 from handlers.start import start, help, show_lang, inline_start
-from handlers.zip import ASKING_FOR_ARCHIVE_NAME, ASKING_FOR_ENCRYPTION, ASKING_FOR_PASSWORD, ask_for_password, get_files, add_files, ask_for_archive_name, ask_for_password, inline_compression_flow, inline_start_compression, recive_archive_name, build_archive_encrypted, build_archive_un_encrypted, cancel_compression, inline_show_files, inline_cancel_compression, show_remove_buttons, inline_remove_file
+from handlers.zip import ASKING_FOR_ARCHIVE_NAME, ASKING_FOR_ENCRYPTION, ASKING_FOR_PASSWORD, ask_for_password, get_files, add_files, ask_for_archive_name, ask_for_password, inline_compression_flow, inline_start_compression, recive_archive_name, build_archive_encrypted, build_archive_un_encrypted, cancel_compression, inline_show_files, inline_cancel_compression, show_remove_buttons, inline_remove_file, inline_show_remove_buttons
 import asyncio
 from database import Database
 
@@ -33,6 +33,7 @@ def main():
     app.add_handler(CallbackQueryHandler(inline_start, pattern='^start_'))
     app.add_handler(CallbackQueryHandler(inline_show_files, pattern= '^zipnoconv_'))
     app.add_handler(CallbackQueryHandler(inline_remove_file, pattern= '^zipremove_'))
+    app.add_handler(CallbackQueryHandler(inline_show_remove_buttons, pattern='^zipremovepage_'))
 
     app.add_handler(CommandHandler('show_files', get_files))
     app.add_handler(CommandHandler('remove_files', show_remove_buttons))

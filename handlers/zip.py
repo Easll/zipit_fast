@@ -62,13 +62,31 @@ async def get_files (update : Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 
-async def _show_remove_buttons_logic (user_id, reply_func, message_1: str, message_2: str, context : ContextTypes.DEFAULT_TYPE):
-    db = context.bot_data['db']
-    
+async def _show_remove_buttons_logic (user_id, reply_func, message_1: str, message_2: str, context : ContextTypes.DEFAULT_TYPE, page: int = 0):
+    db = context.bot_data['db'] 
+    lang = context.user_data.get ('lang', await db.get_language(user_id))
+
     files = await db.get_pending_files(user_id = user_id)
+
+    page = int(page)
+    floor = page * 10
+
+    if (len(files) - floor) > 10:
+        cieling = floor + 10
+        next_page = page + 1
+    else:
+        cieling = len(files)
+        next_page = None
+    
+    if page > 0:
+        pre_page = page - 1
+    else:
+        pre_page = None
+
+    files_to_show = files[floor : cieling]
     
     if files:
-        await reply_func(message_1, reply_markup = keyboard.get_remove_buttons(files= files))
+        await reply_func(message_1, reply_markup = keyboard.get_remove_buttons(lang= lang, files= files_to_show, next_page= next_page, pre_page= pre_page))
 
     else:
         await reply_func(message_2)
@@ -249,8 +267,25 @@ async def inline_remove_file (update: Update, context: ContextTypes.DEFAULT_TYPE
             message_2 = message_2,
             context= context)
 
+async def inline_show_remove_buttons (update: Update, context: ContextTypes.DEFAULT_TYPE):
+    db = context.bot_data['db']
+    lang = context.user_data.get ('lang', await db.get_language(update.effective_user.id))
 
+    query = update.callback_query
+    await query.answer()
 
+    header, page = query.data.split('_', 1)
+
+    message_1 = get_message(lang= lang, key = 'Remove_options')
+    message_2 = get_message(lang= lang, key= 'No_remove_options')
+
+    await _show_remove_buttons_logic(
+            user_id= update.effective_user.id,
+            reply_func= query.message.edit_text,
+            message_1 = message_1,
+            message_2 = message_2,
+            page = page,
+            context= context)
 
  
 

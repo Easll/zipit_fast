@@ -300,6 +300,12 @@ BT_EN_ENCRYPT = 'Encyrpted'
 
 BT_EN_DONT_ENCRYPT = 'Non Encrypted'
 
+BT_EN_REMOVE_FILES = 'Remove Files'
+
+BT_EN_NEXT = 'Next'
+
+BT_EN_BACK = 'Back'
+
 #Farsi
 
 BT_FAS_LANGUAGE = 'زبان'
@@ -316,6 +322,11 @@ BT_FAS_ENCRYPT = 'با رمزنگاری'
 
 BT_FAS_DONT_ENCRYPT = 'بدون رمزنگاری'
 
+BT_FAS_REMOVE_FILES = 'حذف فایل ها'
+
+BT_FAS_NEXT = 'بعدی'
+
+BT_FAS_BACK = 'قبلی'
 
 #Button dictionary
 
@@ -328,6 +339,9 @@ BUTTONS = {
             'Cancel_compression' : BT_EN_CANCEL_COMPRESSION,
             'Encrypt' : BT_EN_ENCRYPT,
             'Dont_encrypt' : BT_EN_DONT_ENCRYPT,
+            'Remove_files': BT_EN_REMOVE_FILES,
+            'Next': BT_EN_NEXT,
+            'Back': BT_EN_BACK,
             },
         'fas': {
             'Language' : BT_FAS_LANGUAGE,
@@ -337,6 +351,9 @@ BUTTONS = {
             'Cancel_compression' : BT_FAS_CANCEL_COMPRESSION,
             'Encrypt' : BT_FAS_ENCRYPT,
             'Dont_encrypt' : BT_FAS_DONT_ENCRYPT,
+            'Remove_files': BT_FAS_REMOVE_FILES,
+            'Next': BT_FAS_NEXT,
+            'Back': BT_FAS_BACK,
             },
         }
 
