@@ -9,7 +9,7 @@ def get_greet_buttons (lang: str):
             InlineKeyboardButton(text='🔴 Help ', callback_data='start_help')
         ],
         [
-            InlineKeyboardButton(text= get_button_name(lang = lang, key = 'Show_files'), callback_data='zipnoconv_show_files'),
+            InlineKeyboardButton(text= get_button_name(lang = lang, key = 'Show_files'), callback_data='zipnoconv_show_files:0:0'),
         ]
     ]
 
@@ -27,7 +27,7 @@ def get_lang_buttons ():
     return InlineKeyboardMarkup(keyboard)
 
 # under the message that shows pending files
-def get_pending_files_buttons (lang: str):
+def get_pending_files_buttons (lang: str, next_page: int | None, pre_page: int | None):
     keyboard = [
             [
                 InlineKeyboardButton(text = get_button_name(lang = lang, key = 'Compress'), callback_data= 'zipstartconv'),
@@ -35,6 +35,20 @@ def get_pending_files_buttons (lang: str):
             [
                 InlineKeyboardButton(text= get_button_name(lang = lang, key= 'Remove_files'), callback_data= 'zipremovepage_0')]
             ]
+
+    page_buttons = []
+
+    if pre_page != None:
+        pre_page_button = InlineKeyboardButton(text=get_button_name(lang=lang, key='Back'), callback_data= f"zipnoconv_show_files:{pre_page}:1")
+        page_buttons.append(pre_page_button)
+
+    if next_page:
+        next_page_button = InlineKeyboardButton(text= get_button_name(lang= lang, key= 'Next'), callback_data= f"zipnoconv_show_files:{next_page}:1")
+        page_buttons.append(next_page_button)
+
+    keyboard.append(page_buttons)
+
+
     return InlineKeyboardMarkup(keyboard)
 
 def get_cancel_button (lang: str):

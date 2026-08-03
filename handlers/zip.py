@@ -41,20 +41,36 @@ async def add_files (update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(get_message(lang=lang, key='File_too_big'))
 
 
-async def _get_files_logic (user_id, reply_func, context: ContextTypes.DEFAULT_TYPE):
+async def _get_files_logic (user_id, reply_func, context: ContextTypes.DEFAULT_TYPE, page: int = 0):
     
     db = context.bot_data['db']
     lang = context.user_data.get ('lang', await db.get_language(user_id))
     
     data_dictionary = await db.get_pending_files(user_id = user_id)
+
+    page = int(page)
+    floor = page*15
+
+    if (len(data_dictionary) - floor) > 15:
+        cieling = floor + 15
+        next_page = page + 1
+    else:
+        cieling = len(data_dictionary)
+        next_page = None
     
+    if page > 0:
+        pre_page = page - 1
+    else:
+        pre_page = None
+
+
     message_text = f"{get_message(lang=lang, key = 'Show_pending_files_I')} \n ===================== \n"
-    count = 0
-    for row in data_dictionary:
+    count = floor
+    for row in data_dictionary[floor:cieling]:
         count = count + 1
         message_text = message_text +f'({count}) \n'+ get_message(lang = lang, key = 'Show_pending_files_II').format(name = row['file_name'], size = bytes_to_kb(row['file_size'])) + '\n ===================== \n'
 
-    await reply_func(message_text, reply_markup = keyboard.get_pending_files_buttons(lang= lang))
+    await reply_func(message_text, reply_markup = keyboard.get_pending_files_buttons(lang= lang, pre_page= pre_page, next_page= next_page))
 
 
 async def get_files (update : Update, context: ContextTypes.DEFAULT_TYPE):
@@ -241,9 +257,15 @@ async def inline_show_files (update: Update, context: ContextTypes.DEFAULT_TYPE)
     
     query = update.callback_query
     await query.answer()
+    
+    header, page, stage = query.data.split(':', 2)
+    
+    if stage == '0':
+        reply_func = query.message.reply_text
+    elif stage == '1':
+        reply_func = query.message.edit_text
 
-    if query.data == 'zipnoconv_show_files':
-        await _get_files_logic(user_id= update.effective_user.id, reply_func= query.message.reply_text, context = context)
+    await _get_files_logic(user_id= update.effective_user.id, reply_func= reply_func, context = context, page= page)
 
 
 
