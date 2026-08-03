@@ -32,8 +32,8 @@ def main():
 
     app.add_handler(CallbackQueryHandler(inline_start, pattern='^start_'))
     app.add_handler(CallbackQueryHandler(inline_show_files, pattern= '^zipnoconv_'))
-    app.add_handler(CallbackQueryHandler(inline_remove_file, pattern= '^zipremove_'))
-    app.add_handler(CallbackQueryHandler(inline_show_remove_buttons, pattern='^zipremovepage_'))
+    app.add_handler(CallbackQueryHandler(inline_remove_file, pattern= '^zipremove:'))
+    app.add_handler(CallbackQueryHandler(inline_show_remove_buttons, pattern='^zipremovepage:'))
 
     app.add_handler(CommandHandler('show_files', get_files))
     app.add_handler(CommandHandler('remove_files', show_remove_buttons))

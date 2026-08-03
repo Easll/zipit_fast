@@ -33,7 +33,7 @@ def get_pending_files_buttons (lang: str, next_page: int | None, pre_page: int |
                 InlineKeyboardButton(text = get_button_name(lang = lang, key = 'Compress'), callback_data= 'zipstartconv'),
                 ],
             [
-                InlineKeyboardButton(text= get_button_name(lang = lang, key= 'Remove_files'), callback_data= 'zipremovepage_0')]
+                InlineKeyboardButton(text= get_button_name(lang = lang, key= 'Remove_files'), callback_data= 'zipremovepage:0')]
             ]
 
     page_buttons = []
@@ -77,17 +77,17 @@ def get_ask_for_encryption_buttons (lang: str):
 def get_remove_buttons (lang: str, files: dict, next_page: None | int , pre_page: None | int):
     buttons = []
     for file in files:
-        button = [InlineKeyboardButton(text= f"{file['file_name']}", callback_data= f"zipremove_{file['id']}")]
+        button = [InlineKeyboardButton(text= f"{file['file_name']}", callback_data= f"zipremove:{file['id']}")]
         buttons.append(button)
 
     page_buttons = []
 
     if pre_page != None:
-        pre_page_button = InlineKeyboardButton(text=get_button_name(lang=lang, key='Back'), callback_data= f"zipremovepage_{pre_page}")
+        pre_page_button = InlineKeyboardButton(text=get_button_name(lang=lang, key='Back'), callback_data= f"zipremovepage:{pre_page}")
         page_buttons.append(pre_page_button)
 
     if next_page:
-        next_page_button = InlineKeyboardButton(text= get_button_name(lang= lang, key= 'Next'), callback_data= f"zipremovepage_{next_page}")
+        next_page_button = InlineKeyboardButton(text= get_button_name(lang= lang, key= 'Next'), callback_data= f"zipremovepage:{next_page}")
         page_buttons.append(next_page_button)
 
     buttons.append(page_buttons)

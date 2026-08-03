@@ -49,19 +49,7 @@ async def _get_files_logic (user_id, reply_func, context: ContextTypes.DEFAULT_T
     data_dictionary = await db.get_pending_files(user_id = user_id)
 
     page = int(page)
-    floor = page*15
-
-    if (len(data_dictionary) - floor) > 15:
-        cieling = floor + 15
-        next_page = page + 1
-    else:
-        cieling = len(data_dictionary)
-        next_page = None
-    
-    if page > 0:
-        pre_page = page - 1
-    else:
-        pre_page = None
+    floor, cieling, pre_page, next_page = utils.give_pagenation_info(page= page, page_size= 15, content= data_dictionary)
 
 
     message_text = f"{get_message(lang=lang, key = 'Show_pending_files_I')} \n ===================== \n"
@@ -85,24 +73,10 @@ async def _show_remove_buttons_logic (user_id, reply_func, message_1: str, messa
     files = await db.get_pending_files(user_id = user_id)
 
     page = int(page)
-    floor = page * 10
-
-    if (len(files) - floor) > 10:
-        cieling = floor + 10
-        next_page = page + 1
-    else:
-        cieling = len(files)
-        next_page = None
-    
-    if page > 0:
-        pre_page = page - 1
-    else:
-        pre_page = None
-
-    files_to_show = files[floor : cieling]
+    floor, cieling, pre_page, next_page = utils.give_pagenation_info(page= page, page_size= 10, content= files)
     
     if files:
-        await reply_func(message_1, reply_markup = keyboard.get_remove_buttons(lang= lang, files= files_to_show, next_page= next_page, pre_page= pre_page))
+        await reply_func(message_1, reply_markup = keyboard.get_remove_buttons(lang= lang, files= files[floor:cieling], next_page= next_page, pre_page= pre_page))
 
     else:
         await reply_func(message_2)
@@ -276,7 +250,7 @@ async def inline_remove_file (update: Update, context: ContextTypes.DEFAULT_TYPE
     query = update.callback_query
     await query.answer()
     
-    header, file_id = query.data.split('_', 1)
+    header, file_id = query.data.split(':', 1)
     await _remove_file_logic(user_id=update.effective_user.id, file_db_id=file_id, context = context)
 
     message_1 = get_message(lang= lang, key= 'File_removed')
@@ -296,7 +270,7 @@ async def inline_show_remove_buttons (update: Update, context: ContextTypes.DEFA
     query = update.callback_query
     await query.answer()
 
-    header, page = query.data.split('_', 1)
+    header, page = query.data.split(':', 1)
 
     message_1 = get_message(lang= lang, key = 'Remove_options')
     message_2 = get_message(lang= lang, key= 'No_remove_options')

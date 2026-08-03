@@ -123,6 +123,26 @@ def check_total_size (files : dict):
     return True
 
 
+def give_pagenation_info (page: int, page_size: int, content):
+
+    floor = page*page_size
+
+    if (len(content) - floor) > page_size:
+        cieling = floor + page_size
+        next_page = page + 1
+    else:
+        cieling = len(content)
+        next_page = None
+    
+    if page > 0:
+        pre_page = page - 1
+    else:
+        pre_page = None
+
+    return (floor, cieling, pre_page, next_page)
+
+
+
 
 
 
