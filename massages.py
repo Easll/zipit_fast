@@ -3,93 +3,91 @@
 
 
 EN_WELCOME = """
-Hi!
+👋 Hi!
 
-I'm Zipit_Fast!
+🤖 I'm Zipit_Fast!
 
-send me your files and I'll compress them (with encryprion if you want) and send them to you!            
+📂 Send me your files and I'll compress them (with 🔒 encryption if you want) and send them back to you!            
 
-/help for more and /language for setting the language. (supoorting English and Persian at the moment)
+🔴 /help for more info 
+🅰 /language to change the language. (Currently supporting English and Persian)
 """
-
 EN_HELP = """
-Placeholder Text
-
+placeholder text
 """
 
 EN_SHOW_LANG = """
-Choose the language 
-
+🅰 Choose your language:
 """
+
 EN_CHOSE_ENG = """
-English was chosen.
+✅ English was chosen.
 
-You can always set the language from the main menue.
-
+You can always change the language from the main menu.
 """
 
-
-EN_EXTRACTING_MEATDATA = """
-Extracting metadata ..."""
+EN_EXTRACTING_METADATA = """
+⚙️ Extracting metadata..."""
 
 EN_METADATA_ADDED = """
-Added to your files, ready to be archived:
+✅ Added to your pending files, ready to be archived:
 
-Name: {name}
-
-Size: {size}
+📄 Name: {name}
+⚖️ Size: {size}
 """
 
 EN_SHOW_PENDING_FILES_I = """
-Your pending files:"""
-
-EN_SHOW_PENDING_FILES_II ="""
-Name: {name}
-Size: {size}
+📁 Your pending files:
 """
 
-EN_ASKING_FOR_ARCHIVE_NAME ="""
-Please enter a name for your archive
+EN_SHOW_PENDING_FILES_II = """
+📄 Name: {name}
+⚖️ Size: {size}
+"""
+
+EN_ASKING_FOR_ARCHIVE_NAME = """
+Please enter a name for your archive:
 """
 
 EN_ASKING_FOR_ENCRYPTION = """
-Do you want your archive to be encrypted?
+🔒 Do you want your archive to be encrypted?
 """
 
 EN_ASKING_FOR_PASSWORD = """
-Please enter a password for your archive
+🔑 Please enter a password for your archive:
 """
 
 EN_STARTING_COMPRESSION = """
-Downloading ..."""
+⬇️ Downloading files..."""
 
 EN_COMPRESSING = """
-Compressing ..."""
+🗜️ Compressing files..."""
 
 EN_UPLOADING = """
-Uploading ..."""
+⬆️ Uploading archive..."""
 
 EN_COMPRESSION_FAILED = """
-Compression failed. Please try again.
+❌ Compression failed. Please try again.
 """
 
 EN_COMPRESSION_CANCELED = """
-Operation canceled."""
+⏹️ Operation canceled.
+"""
 
 EN_NO_PENDING_FILES = """
-You have no un-archived files
+📭 You have no pending files.
 """
 
 EN_FILE_TOO_BIG = """
-Error: The bot is currently in Test and cannot download files bigger than 20 MB
+⚠️ Error: The bot is currently in Test mode and cannot download files bigger than 20 MB.
 """
 
 EN_ARCHIVE_TOO_BIG = """
-Error: The total size of your archive will exceed 50 MB. The bot is currently in test and cannot upload files bigget than 50 MB"""
-
+⚠️ Error: The total size of your archive exceeds 50 MB. The bot is currently in test mode and cannot upload files bigger than 50 MB.
+"""
 
 EN_REMOVE_OPTIONS = """
-Which file do you want to remove from your pending files? :
+🗑️ Which file do you want to remove from your pending files?
 """
 
 EN_NO_REMOVE_OPTIONS = """
@@ -97,29 +95,27 @@ You have no pending files to remove.
 """
 
 EN_FILE_REMOVED = """
-Removed Successfully.
+✅ Removed successfully.
 
-Which file do you want to remove from your pending files? :"""
+🗑️ Which file do you want to remove next?
+"""
 
 EN_FILE_REMOVED_NO_MORE = """
-Removed Successfully.
+✅ Removed successfully.
 
-You have no pending files to remove.
+You have no more pending files to remove.
 """
 #Farsi messages
-
 FAS_WELCOME = """
-سلام!
+👋 سلام!
 
-خوش اومدی!
+ من Zipit_Fast هستم!
 
-فایل هات رو برام بفرست تا اونها رو فشرده و ارسال کنم. (امکان رمزگذاری هم هست)
+📂 فایل‌هات رو برام بفرست تا فشرده‌شون کنم (با امکان 🔒 رمزگذاری) و برات بفرستم!            
 
-/help برای راهنمایی
+🔴 برای راهنمایی /help 
 
-/language برای تغییر زبان
-
-
+🅰 برای تغییر زبان /language
 """
 
 FAS_HELP = """
@@ -128,95 +124,87 @@ FAS_HELP = """
 """
 
 FAS_SHOW_LANG = """
-زبان را انتخاب کنید
-
+🅰 زبان مورد نظر خود را انتخاب کنید:
 """
 
 FAS_CHOSE_FAS = """
-زبان فارسی انتخاب شد.
+✅ زبان فارسی انتخاب شد.
 
-همیشه می توانید زبان را از منوی اصلی تغییر دهید
-
+همیشه می‌توانید زبان را از منوی اصلی تغییر دهید.
 """
 
-FAS_EXTRACTING_MEATDATA ="""
-استخراج مشخصات ...""" 
+FAS_EXTRACTING_METADATA = """
+⚙️ در حال استخراج مشخصات...""" 
 
 FAS_METADATA_ADDED = """
-به فایل های شما افزوده شد. آماده برای فشرده سازی:
+✅ به لیست فایل‌های شما اضافه شد و آماده فشرده‌سازی است:
 
-نام: {name}
-
-اندازه:{size}
+📄 نام: {name}
+⚖️ اندازه: {size}
 """
 
 FAS_SHOW_PENDING_FILES_I = """
-فایل های آرشیو نشده شما:
+📁 فایل‌های در انتظار (آرشیو نشده) شما:
 """
 
 FAS_SHOW_PENDING_FILES_II = """
-نام: {name}
-اندازه: {size}
+📄 نام: {name}
+⚖️ اندازه: {size}
 """
 
-
-FAS_ASKING_FOR_ARCHIVE_NAME ="""
-لطفا برای آرشیو خود یک نام انتخاب کنید:"""
-
+FAS_ASKING_FOR_ARCHIVE_NAME = """
+لطفاً یک نام برای آرشیو خود انتخاب کنید:"""
 
 FAS_ASKING_FOR_ENCRYPTION = """
-آیا می خواهید آرشیو شما رمزنگاری شده باشد؟
+🔒 آیا می‌خواهید آرشیو شما رمزگذاری شود؟
 """
 
-
 FAS_ASKING_FOR_PASSWORD = """
-لطفا برای آرشیو خود یک رمز انتخاب کنید:"""
+🔑 لطفاً یک رمز عبور برای آرشیو خود وارد کنید:"""
 
-FAS_STARTING_COMPRESSION ="""
-در حال دانلود ..."""
+FAS_STARTING_COMPRESSION = """
+⬇️ در حال دانلود فایل‌ها..."""
 
 FAS_COMPRESSING = """
-در حال فشرده سازی ..."""
+🗜️ در حال فشرده‌سازی..."""
 
 FAS_UPLOADING = """
-در حال آپلود ..."""
+⬆️ در حال آپلود آرشیو..."""
 
 FAS_COMPRESSION_FAILED = """
-فشرده سازی شکست خورد. دوباره تلاش کنید."""
+❌ فشرده‌سازی با خطا مواجه شد. لطفاً دوباره تلاش کنید."""
 
 FAS_COMPRESSION_CANCELED = """
-عملیات لغو شد."""
+⏹️ عملیات لغو شد."""
 
 FAS_NO_PENDING_FILES = """
-فایل آرشیو نشده ای ندارید
+شما هیچ فایل در انتظاری ندارید.
 """
 
 FAS_FILE_TOO_BIG = """
-مشکل: بات در حال احضر در مرحله تست قرار دارد و نمی تواند فایل های بیشتر از 20 مگابایت را دانلود کند."""
+⚠️ خطا: بات در حال حاضر در مرحله تست قرار دارد و نمی‌تواند فایل‌های بزرگتر از 20 مگابایت را دانلود کند."""
 
 FAS_ARCHIVE_TOO_BIG = """
-مشکل: حجم آرشیو شما از 50 مگابایت فراتر رفته است.  بات در حال حاضر در مرحله تست قرار دارد و نمی تواند آرشیو های بیشتر از 50 مگابایت را آپلود کند."""
-
+⚠️ خطا: حجم آرشیو شما از 50 مگابایت فراتر رفته است. بات در حال حاضر در مرحله تست قرار دارد و نمی‌تواند آرشیوهای بزرگتر از 50 مگابایت را آپلود کند."""
 
 FAS_REMOVE_OPTIONS = """
-کدام فایل رو میخواهید از لیست فایل هات حذف کنی؟ :
+🗑️ کدام فایل را می‌خواهید از لیست فایل‌های در انتظار حذف کنید؟
 """
 
 FAS_NO_REMOVE_OPTIONS = """
-فایلی برای حذف کردن وجود ندارد.
+📭 فایلی برای حذف وجود ندارد.
 """
 
 FAS_FILE_REMOVED = """
-فایل با موفیت حذف شد .
+✅ فایل با موفقیت حذف شد.
 
-کدام فایل را می خواید از لیست حذف کنید؟ :
-"""
+🗑️ کدام فایل بعدی را می‌خواهید حذف کنید؟"""
 
 FAS_FILE_REMOVED_NO_MORE = """
-فایل با موفیت حذف شد .
+✅ فایل با موفقیت حذف شد.
 
-فایلی برای حذف کردن وجود ندارد.
-"""
+📭 فایلی برای حذف باقی نمانده است."""
+
 
 
 #The dictionary
@@ -228,7 +216,7 @@ MESSAGES = {
         'Help' : EN_HELP,
         'Show_lang' : EN_SHOW_LANG,
         'Chose_en' : EN_CHOSE_ENG,
-        'Extracting_metadata': EN_EXTRACTING_MEATDATA,
+        'Extracting_metadata': EN_EXTRACTING_METADATA,
         'Metadata_added': EN_METADATA_ADDED,
         'Show_pending_files_I': EN_SHOW_PENDING_FILES_I,
         'Show_pending_files_II': EN_SHOW_PENDING_FILES_II,
@@ -253,7 +241,7 @@ MESSAGES = {
         'Help' : FAS_HELP,
         'Show_lang' : FAS_SHOW_LANG,
         'Chose_fas' : FAS_CHOSE_FAS,
-        'Extracting_metadata' : FAS_EXTRACTING_MEATDATA,
+        'Extracting_metadata' : FAS_EXTRACTING_METADATA,
         'Metadata_added' : FAS_METADATA_ADDED,
         'Show_pending_files_I': FAS_SHOW_PENDING_FILES_I,
         'Show_pending_files_II': FAS_SHOW_PENDING_FILES_II,
@@ -286,25 +274,25 @@ def get_message (lang : str, key: str):
 
 #English
 
-BT_EN_LANGUAGE = 'Language'
+BT_EN_LANGUAGE = '🅰 Language'
 
-BT_EN_HELP = 'Help'
+BT_EN_HELP = '🔴 Help'
 
-BT_EN_SHOW_FILES = 'Pending Files'
+BT_EN_SHOW_FILES = '📁 Pending Files'
 
-BT_EN_COMPRESS = 'Compress'
+BT_EN_COMPRESS = '🗜️ Compress'
 
-BT_EN_CANCEL_COMPRESSION = 'Cancle'
+BT_EN_CANCEL_COMPRESSION = '❌ Cancel'
 
-BT_EN_ENCRYPT = 'Encyrpted'
+BT_EN_ENCRYPT = '🔒 Encrypted'
 
-BT_EN_DONT_ENCRYPT = 'Non Encrypted'
+BT_EN_DONT_ENCRYPT = '🔓 Unencrypted'
 
-BT_EN_REMOVE_FILES = 'Remove Files'
+BT_EN_REMOVE_FILES = '🗑️ Remove Files'
 
-BT_EN_NEXT = 'Next'
+BT_EN_NEXT = '➡️ Next'
 
-BT_EN_BACK = 'Back'
+BT_EN_BACK = '⬅️ Back'
 
 #Farsi
 
@@ -312,21 +300,21 @@ BT_FAS_LANGUAGE = 'زبان'
 
 BT_FAS_HELP = 'راهنمایی'
 
-BT_FAS_SHOW_FILES = 'فایل های در انتظار'
+BT_FAS_SHOW_FILES = '📁 فایل های در انتظار'
 
-BT_FAS_COMPRESS = 'فشرده سازی'
+BT_FAS_COMPRESS = '🗜️ فشرده سازی'
 
-BT_FAS_CANCEL_COMPRESSION = 'لغو'
+BT_FAS_CANCEL_COMPRESSION = '❌ لغو'
 
-BT_FAS_ENCRYPT = 'با رمزنگاری'
+BT_FAS_ENCRYPT = '🔒 با رمزنگاری'
 
-BT_FAS_DONT_ENCRYPT = 'بدون رمزنگاری'
+BT_FAS_DONT_ENCRYPT = '🔓 بدون رمزنگاری'
 
-BT_FAS_REMOVE_FILES = 'حذف فایل ها'
+BT_FAS_REMOVE_FILES = '🗑️ حذف فایل ها'
 
-BT_FAS_NEXT = 'بعدی'
+BT_FAS_NEXT = '➡️ بعدی'
 
-BT_FAS_BACK = 'قبلی'
+BT_FAS_BACK = '⬅️ قبلی'
 
 #Button dictionary
 
