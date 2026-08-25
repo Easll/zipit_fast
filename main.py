@@ -5,6 +5,8 @@ from handlers.start import start, help, show_lang, inline_start
 from handlers.zip import ASKING_FOR_ARCHIVE_NAME, ASKING_FOR_ENCRYPTION, ASKING_FOR_PASSWORD, ask_for_password, get_files, add_files, ask_for_archive_name, ask_for_password, inline_compression_flow, inline_start_compression, recive_archive_name, build_archive_encrypted, build_archive_un_encrypted, cancel_compression, inline_show_files, inline_cancel_compression, show_remove_buttons, inline_remove_file, inline_show_remove_buttons
 import asyncio
 from database import Database
+import re
+from handlers.proxy import compress_proxy
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
@@ -58,7 +60,9 @@ def main():
             ]
         )) 
 
+    TELEGRAM_PROXY = re.compile(r't\.me/proxy|tg://proxy', re.IGNORECASE)
     app.add_handler(MessageHandler(filters.ATTACHMENT, add_files))
+    app.add_handler(MessageHandler(filters.TEXT & filters.Regex(TELEGRAM_PROXY) & ~filters.COMMAND & ~filters.ATTACHMENT, compress_proxy))
 
 
     app.run_polling()

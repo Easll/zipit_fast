@@ -5,6 +5,7 @@ from telegram import Message
 import mimetypes
 from datetime import datetime
 import os
+import uuid
 
 def identify_files (message: Message):
 
@@ -142,7 +143,13 @@ def give_pagenation_info (page: int, page_size: int, content):
     return (floor, cieling, pre_page, next_page)
 
 
+async def _add_text_to_file (text, dir_path):
+    file_path = os.path.join(dir_path, f"{uuid.uuid4().hex}.txt")
 
+    with open(file_path, 'w', encoding= 'utf-8') as f:
+        f.write(text)
+
+    return file_path
 
 
 

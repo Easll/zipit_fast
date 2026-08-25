@@ -105,6 +105,14 @@ EN_FILE_REMOVED_NO_MORE = """
 
 You have no more pending files to remove.
 """
+
+EN_PROXY_RECOGNIZED = """
+Proxy recognized. Making an encrypted zip..."""
+
+EN_PROXY_PASSWORD = """
+Password: {password}"""
+
+
 #Farsi messages
 FAS_WELCOME = """
 👋 سلام!
@@ -206,6 +214,11 @@ FAS_FILE_REMOVED_NO_MORE = """
 📭 فایلی برای حذف باقی نمانده است."""
 
 
+FAS_PROXY_RECOGNIZED = """
+پروکسی تشخیص داده شد. در حال ساخت زیپ رمزگزاری شده ..."""
+
+FAS_PROXY_PASSWORD = """
+رمز: {password}"""
 
 #The dictionary
 
@@ -234,6 +247,8 @@ MESSAGES = {
         'Remove_options': EN_REMOVE_OPTIONS,
         'File_removed': EN_FILE_REMOVED,
         'File_removed_no_more_files': EN_FILE_REMOVED_NO_MORE,
+        'Proxy_recognized': EN_PROXY_RECOGNIZED,
+        'Proxy_password': EN_PROXY_PASSWORD,
     },
 
     'fas': {
@@ -259,6 +274,8 @@ MESSAGES = {
         'Remove_options': FAS_REMOVE_OPTIONS,
         'File_removed': FAS_FILE_REMOVED,
         'File_removed_no_more_files': FAS_FILE_REMOVED_NO_MORE,
+        'Proxy_recognized': FAS_PROXY_RECOGNIZED,
+        'Proxy_password': FAS_PROXY_PASSWORD,
     }
 }
 
