@@ -1,12 +1,13 @@
 import os
 from dotenv import load_dotenv
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ConversationHandler, MessageHandler, filters
+from telegram.ext.filters import BaseFilter
 from handlers.start import start, help, show_lang, inline_start
 from handlers.zip import ASKING_FOR_ARCHIVE_NAME, ASKING_FOR_ENCRYPTION, ASKING_FOR_PASSWORD, ask_for_password, get_files, add_files, ask_for_archive_name, ask_for_password, inline_compression_flow, inline_start_compression, recive_archive_name, build_archive_encrypted, build_archive_un_encrypted, cancel_compression, inline_show_files, inline_cancel_compression, show_remove_buttons, inline_remove_file, inline_show_remove_buttons
 import asyncio
 from database import Database
-import re
 from handlers.proxy import compress_proxy
+from utils import find_proxy_url
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
@@ -23,6 +24,36 @@ async def close_db (app : Application):
     if db:
         await db.close()
         print ('Database connection closed')
+
+
+class _HasProxyFilter(BaseFilter):
+    """True when a message's text, caption, or any link entity holds a proxy URL.
+
+    ``filters.Regex`` (used previously) only inspects ``message.text``. Telegram
+    stores the destination of a hyperlink in a ``MessageEntity.TEXT_LINK`` entity,
+    not in the text, so a labeled proxy link (e.g. ``[label](t.me/proxy?...)``)
+    used to slip past the handler. This filter scans those entities too.
+    """
+
+    def filter(self, update):
+        message = (
+            update.channel_post
+            or update.message
+            or update.edited_channel_post
+            or update.edited_message
+            or update.business_message
+            or update.edited_business_message
+            or update.guest_message
+        )
+        if message is None:
+            return False
+
+        text = message.text or message.caption
+        entities = message.entities or message.caption_entities or ()
+        return find_proxy_url(text, entities) is not None
+
+
+text_or_caption_has_proxy = _HasProxyFilter()
 
 
 def main():
@@ -60,9 +91,8 @@ def main():
             ]
         )) 
 
-    TELEGRAM_PROXY = re.compile(r't\.me/proxy|tg://proxy', re.IGNORECASE)
     app.add_handler(MessageHandler(filters.ATTACHMENT, add_files))
-    app.add_handler(MessageHandler(filters.TEXT & filters.Regex(TELEGRAM_PROXY) & ~filters.COMMAND & ~filters.ATTACHMENT, compress_proxy))
+    app.add_handler(MessageHandler(filters.TEXT & text_or_caption_has_proxy & ~filters.COMMAND, compress_proxy))
 
 
     app.run_polling()

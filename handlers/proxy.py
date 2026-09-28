@@ -6,6 +6,7 @@ from telegram.ext import ContextTypes, ConversationHandler
 from massages import get_message
 import keyboard
 import utils
+from utils import find_proxy_url
 import secrets
 import string
 import random
@@ -57,7 +58,7 @@ async def compress_proxy (update: Update, context: ContextTypes.DEFAULT_TYPE):
             reply_func= update.message.reply_text,
             reply_func_doc= update.message.reply_document,
             lang= lang,
-            text= update.message.text,
+            text= find_proxy_url(update.message.text, update.message.entities) or update.message.text,
             context= context,)
 
 

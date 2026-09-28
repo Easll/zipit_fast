@@ -1,7 +1,8 @@
 from os.path import isfile
 import asyncio
+import re
 import pyzipper 
-from telegram import Message
+from telegram import Message, MessageEntity
 import mimetypes
 from datetime import datetime
 import os
@@ -150,6 +151,58 @@ async def _add_text_to_file (text, dir_path):
         f.write(text)
 
     return file_path
+
+
+# Matches both common ways a Telegram proxy link is written:
+#   t.me/proxy?vpn=1&protocol=... or https://t.me/proxy?...
+#   tg://proxy?... / tg://socks?... / tg://tcp?...
+# Deliberately matches the *start* of a URL so we can anchor a full-URL
+# extraction, and it also matches a bare label like "t.me/proxy".
+PROXY_PATTERN = re.compile(r'(?:https?://)?t\.me/proxy|tg://(?:proxy|socks|tcp)', re.IGNORECASE)
+
+# Any character that terminates a URL in plain text. Telegram wraps URLs in
+# entities, so in the no-entity case (bare paste) the URL ends at whitespace.
+_URL_END = re.compile(r'[\s\u2028\u2029]')
+
+
+def _extract_full_url(text: str, match) -> str:
+    """Expand a PROXY_PATTERN match to the end of its URL (keeps query params)."""
+    end = _URL_END.search(text, match.end())
+    return text[match.start(): end.start() if end else len(text)]
+
+
+def find_proxy_url(text: str | None, entities) -> str | None:
+    """Return the proxy URL carried by a message, if any.
+
+    Telegram does not put the real href of a hyperlink into ``message.text``.
+    A message like ``[label](https://t.me/proxy?a=1)`` has ``message.text ==
+    "label"`` and the URL hidden in a ``MessageEntity.TEXT_LINK``. So we scan
+    both the raw text and every link-style entity (their ``url`` attribute and
+    the spanned substring), and return the first proxy URL found (full URL,
+    query string included).
+    """
+    # 1) The plain text itself may contain the URL (covers bare t.me/proxy...)
+    matches = PROXY_PATTERN.search(text) if text else None
+    if matches:
+        return _extract_full_url(text, matches)
+
+    # 2) Hyperlink entities carry the real destination URL in their .url,
+    #    which is invisible in message.text. Also handle subtitles where the
+    #    entity text itself is the proxy.
+    if entities:
+        for ent in entities:
+            if ent.type in (MessageEntity.TEXT_LINK, MessageEntity.URL):
+                if ent.url:
+                    m = PROXY_PATTERN.search(ent.url)
+                    if m:
+                        return _extract_full_url(ent.url, m)
+                if text:
+                    spanned = text[ent.offset:ent.offset + ent.length]
+                    m = PROXY_PATTERN.search(spanned)
+                    if m:
+                        return _extract_full_url(spanned, m)
+
+    return None
 
 
 
