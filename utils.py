@@ -168,41 +168,75 @@ _URL_END = re.compile(r'[\s\u2028\u2029]')
 def _extract_full_url(text: str, match) -> str:
     """Expand a PROXY_PATTERN match to the end of its URL (keeps query params)."""
     end = _URL_END.search(text, match.end())
-    return text[match.start(): end.start() if end else len(text)]
+    # end.start() if matched else len(text) -- the upper bound of the slice.
+    stop = end.start() if end else len(text)
+    return text[match.start():stop]
 
 
-def find_proxy_url(text: str | None, entities) -> str | None:
-    """Return the proxy URL carried by a message, if any.
+def _iter_proxy_urls(text: str):
+    """Yield every proxy URL in `text` (full URL, query params included).
+
+    Advances past the *full* matched URL on each step so the tail of one URL
+    (e.g. its query string) is never re-scanned as the start of a later one.
+    """
+    pos = 0
+    while True:
+        m = PROXY_PATTERN.search(text, pos)
+        if not m:
+            break
+        url = _extract_full_url(text, m)
+        yield url
+        pos = m.start() + len(url)
+
+
+def find_proxy_urls(text: str | None, entities) -> list[str]:
+    """Return every *distinct* proxy URL carried by a message, in order.
 
     Telegram does not put the real href of a hyperlink into ``message.text``.
     A message like ``[label](https://t.me/proxy?a=1)`` has ``message.text ==
     "label"`` and the URL hidden in a ``MessageEntity.TEXT_LINK``. So we scan
     both the raw text and every link-style entity (their ``url`` attribute and
-    the spanned substring), and return the first proxy URL found (full URL,
-    query string included).
+    the spanned substring). Duplicates (e.g. a URL that is both visible text
+    and a linked entity over that same text) are collapsed into one entry.
     """
-    # 1) The plain text itself may contain the URL (covers bare t.me/proxy...)
-    matches = PROXY_PATTERN.search(text) if text else None
-    if matches:
-        return _extract_full_url(text, matches)
+    found: list[str] = []
+    seen: set[str] = set()
+
+    def _record(url: str) -> None:
+        if url and url not in seen:
+            seen.add(url)
+            found.append(url)
+
+    # 1) The plain text itself may contain the URL(s).
+    if text:
+        for url in _iter_proxy_urls(text):
+            _record(url)
 
     # 2) Hyperlink entities carry the real destination URL in their .url,
-    #    which is invisible in message.text. Also handle subtitles where the
-    #    entity text itself is the proxy.
+    #    which is invisible in message.text. Also handle cases where the
+    #    entity's spanned text itself is a proxy.
     if entities:
         for ent in entities:
-            if ent.type in (MessageEntity.TEXT_LINK, MessageEntity.URL):
-                if ent.url:
-                    m = PROXY_PATTERN.search(ent.url)
-                    if m:
-                        return _extract_full_url(ent.url, m)
-                if text:
-                    spanned = text[ent.offset:ent.offset + ent.length]
-                    m = PROXY_PATTERN.search(spanned)
-                    if m:
-                        return _extract_full_url(spanned, m)
+            if ent.type not in (MessageEntity.TEXT_LINK, MessageEntity.URL):
+                continue
+            candidates = []
+            if ent.url:
+                candidates.append(ent.url)
+            if text:
+                candidates.append(text[ent.offset:ent.offset + ent.length])
+            for candidate in candidates:
+                if not candidate:
+                    continue
+                for url in _iter_proxy_urls(candidate):
+                    _record(url)
 
-    return None
+    return found
+
+
+def find_proxy_url(text: str | None, entities) -> str | None:
+    """Return the first proxy URL carried by a message, if any (back-compat)."""
+    urls = find_proxy_urls(text, entities)
+    return urls[0] if urls else None
 
 
 
