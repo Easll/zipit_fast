@@ -11,7 +11,7 @@ import secrets
 import string
 import random
 import shutil
-
+from telegram.constants import ParseMode
 
 
 TEXT_TO_FILE_SEMAPHORE = asyncio.Semaphore(2)
@@ -38,7 +38,7 @@ async def _compress_proxy_logic  (user_id, reply_func, reply_func_doc, lang, tex
                 await reply_func_doc(document = f, filename = f"{archive_name}.zip")
 
             password_message = get_message(lang=lang, key='Proxy_password').format(password = password)    
-            await reply_func(password_message)
+            await reply_func(password_message, parse_mode=ParseMode.HTML)
 
         except Exception as e:
             print (f"proxy compresstion failed: {e}")

@@ -110,7 +110,7 @@ EN_PROXY_RECOGNIZED = """
 Proxy recognized. Making an encrypted zip..."""
 
 EN_PROXY_PASSWORD = """
-Password: {password}"""
+Password: <code>{password}</code>"""
 
 
 #Farsi messages
@@ -218,7 +218,7 @@ FAS_PROXY_RECOGNIZED = """
 پروکسی تشخیص داده شد. در حال ساخت زیپ رمزگزاری شده ..."""
 
 FAS_PROXY_PASSWORD = """
-رمز: {password}"""
+رمز: <code>{password}</code>"""
 
 #The dictionary
 
